@@ -53,3 +53,15 @@
     src : url("./assets/Pretendard/Pretendard-Black.woff");
     font-weight : 900;
 }
+
+@theme {
+    --font-Pretendard : "Pretendard";
+
+    /*  */
+    --color-BlushPink : rgb(255, 115, 148);
+
+    --color-MysticIndigo : rgb(118, 108, 255);
+
+    --color-RoyalAmethyst : rgb(104,92,255);
+
+}

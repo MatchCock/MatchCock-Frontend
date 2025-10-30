@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <!-- 보라색 배경 -->
+  <rect x="4" y="4" width="112" height="112" rx="16" ry="16" fill="#665cf6"/>
+  
+  <!-- 흰색 'B' 도형 -->
+  <path d="
+    M 44 28 
+    L 44 92 
+    L 60 92
+    A 18 16 0 0 0 60 60
+    A 18 16 0 0 0 60 28
+    Z
+    M 60 44 
+    L 44 44 
+    L 44 60 
+    L 60 60
+    A 10 8 0 0 0 60 44
+    Z
+  " fill="#fff" fill-rule="evenodd"/>
+</svg>
