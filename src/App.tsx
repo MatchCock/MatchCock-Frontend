@@ -1,22 +1,18 @@
 /* 변경 사항
  * font Pretendard tailwindcss 적용 o
  * color 이름 변경 o
- *
+ * header 분리하기
+ * footer 분리하기
 */
 
-import LogoImage from "./assets/images/Logo.svg"
+import Header from "./common/Header"
+
+
 
 function App() {
   return (
     <div className="w-full h-dvh">
-      <header className="fixed w-full h-20 p-5">
-        <div className="w-8 h-8">
-          <img
-            src={LogoImage} alt="로고"
-            className="w-full h-full"
-          />
-        </div>
-      </header>
+      <Header />
 
       <main className="w-full h-full md:px-28 flex justify-center items-center ">
         <div id="container" className="flex flex-col grow max-w-7xl items-center md:items-start p-5">
