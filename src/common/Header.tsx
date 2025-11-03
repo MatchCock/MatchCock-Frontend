@@ -4,7 +4,7 @@
 * 
 */
 
-import LogoImage from "../assets/images/Logo.svg"
+import LogoImage from "@assets/images/Logo.svg"
 
 function Header() {
     return (
