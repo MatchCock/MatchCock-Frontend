@@ -1,13 +1,14 @@
 /* 변경 사항
  * font Pretendard tailwindcss 적용 o
  * color 이름 변경 o
- * header 분리하기
+ * header 분리하기 o
  * footer 분리하기
+ * 디자인 변경  
+ *  1. 아이콘 눌렀을 때 홈으로 이동
+ *  2. 버튼 커서 모양 변경
 */
 
-import Header from "./common/Header"
-
-
+import Header from "@common/Header"
 
 function App() {
   return (

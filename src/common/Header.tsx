@@ -8,7 +8,7 @@ import LogoImage from "@assets/images/Logo.svg"
 
 function Header() {
     return (
-        <header className="fixed w-full h-20 p-5">
+        <header className="sticky w-full h-20 p-5">
             <div className="w-8 h-8">
                 <img
                     alt="로고"
