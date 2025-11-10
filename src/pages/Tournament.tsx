@@ -26,25 +26,9 @@ function Tournament() {
     const [tournament, setTournament] = useState<ITournamentData | undefined>(undefined);
     const optionRef = useRef<HTMLDivElement | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isOptionOutScreen, setIsOptionOutScreen] = useState(false)
 
     const onDetailModalOpen = () => setIsModalOpen(true);
     const onDetailModalClose = () => setIsModalOpen(false);
-
-    useEffect(() => {
-        if (optionRef.current === null)
-            return;
-
-        new IntersectionObserver(([entry]) => {
-            if (optionRef.current) {
-                if (entry.isIntersecting) {
-                    setIsOptionOutScreen(false);
-                } else {
-                    setIsOptionOutScreen(true)
-                }
-            }
-        }).observe(optionRef.current)
-    }, [])
 
     useEffect(() => {
         async function fetchTournamentList() {
