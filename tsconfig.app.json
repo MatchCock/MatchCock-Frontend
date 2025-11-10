@@ -17,10 +17,11 @@
     "jsx": "react-jsx",
     "baseUrl" : "./src",
     "paths": {
+      "@type/*" : ["./type/*"],
       "@assets/*" : ["./assets/*"],
       "@common/*" : ["./common/*"],
       "@pages/*" : ["./pages/*"],
-      "@components/*" : ["./components/*"]
+      "@components/*" : ["./components/*"],
     },
 
     /* Linting */
