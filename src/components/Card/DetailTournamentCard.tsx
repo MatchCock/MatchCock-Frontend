@@ -44,8 +44,8 @@ function DetailTournamentCard({
                         className="w-full object-cover"
                     />
                 </section>
-                <section className="w-full md:w-1/2 md:y-full flex flex-col p-6 bg-white rounded-2xl md:overflow-y-scroll shrink-0">
-                    <dl className="w-full h-full flex flex-col md:max-h-[600px] grow shrink-0">
+                <section className="w-full md:w-1/2 md:min-h-full flex flex-col p-6 bg-white rounded-2xl md:overflow-y-scroll shrink-0">
+                    <dl className="w-full min-h-full flex flex-col md:max-h-[600px] grow shrink-0">
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-12 sm:gap-6 py-2 grow">
                             <dt className="sm:col-span-3 flex items-start gap-2 text-sm font-medium text-gray-500 mt-px">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-none" viewBox="0 0 24 24" fill="currentColor">
