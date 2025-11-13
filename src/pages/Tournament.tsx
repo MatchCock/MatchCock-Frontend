@@ -7,7 +7,7 @@ import axios from "axios"
 import type { ITournamentData } from "@type/tournament"
 
 import Header from "@common/Header";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEventHandler } from "react";
 import { IoSearch } from "react-icons/io5";
 import NavigationBar from "@common/NavigationBar";
 import Modal from "react-modal";
@@ -54,6 +54,13 @@ function Tournament() {
         fetchTournamentList();
     }, [])
 
+    const search = useCallback((e: React.FormEvent) => {
+        e.preventDefault();
+
+        const searchText = e.currentTarget.getElementsByTagName("input")[0].value
+        setTournamentList(tournamentList.filter(t => t.TOURNAMENT_NM?.search(searchText) != -1))
+    }, [tournamentList])
+
     return (
         <div className="w-full h-dvh flex flex-col pb-8" style={{ overflowY: isModalOpen ? "hidden" : "scroll" }}>
             <Modal
@@ -97,14 +104,17 @@ function Tournament() {
                                             className="w-10 h-10 cursor-pointer rounded-sm text-xm font-medium text-neutral-500 hover:text-black hover:font-bold">
                                             필터
                                         </button>
-                                        <div className="w-40 relative ">
-
-                                            <input type="text" placeholder="검색하기"
-                                                className="w-40 px-2 pr-7 py-2 border-b border-b-gray-300 outline-none"
-                                            />
-                                            <button className="absolute right-0 bottom-0 -translate-y-1/2 cursor-pointer">
-                                                <IoSearch className="w-6 h-6" />
-                                            </button>
+                                        <div className="w-40 relative">
+                                            <form onSubmit={search}>
+                                                <input type="text" placeholder="검색하기"
+                                                    className="w-40 px-2 pr-7 py-2 border-b border-b-gray-300 outline-none"
+                                                />
+                                                <button type="submit"
+                                                    className="absolute right-0 bottom-0 -translate-y-1/2 cursor-pointer"
+                                                >
+                                                    <IoSearch className="w-6 h-6" />
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
 
