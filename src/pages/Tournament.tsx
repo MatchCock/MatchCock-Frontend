@@ -1,65 +1,32 @@
-/*
-* 1. 상위 폴더 alias 설정 변경하기 o 
-* 2. 기본 폰트 Pretendard르 변경하기
-*/
-
-import axios from "axios"
-import type { ITournamentData } from "@type/tournament"
-
-import Header from "@common/Header";
-import { useCallback, useEffect, useRef, useState, type FormEventHandler } from "react";
-import { IoSearch } from "react-icons/io5";
-import NavigationBar from "@common/NavigationBar";
 import Modal from "react-modal";
+import { IoSearch } from "react-icons/io5";
+import { useRef, useState } from "react";
+import { useQuery} from "@tanstack/react-query"
+
+import { fetchTournamentList } from "@apis";
+import Header from "@common/Header";
+import NavigationBar from "@common/NavigationBar";
 import DetailTournamentCard from "@components/Card/DetailTournamentCard"
 import SummaryTournamentCard from "@components/Card/SummaryTournamentCard";
-
 import AlignPanel from "@components/Panel/Align"
 import FilterPanel from "@components/Panel/Filter"
-
-const ax = axios.create({
-    baseURL: "https://sponet.co.kr/php/bm/",
-    headers: {
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-    },
-})
+import type { ITournamentData } from "@type/tournament"
 
 function Tournament() {
-    const [tournament, setTournament] = useState<ITournamentData | undefined>(undefined);
-    const [tournamentList, setTournamentList] = useState<ITournamentData[]>([])
     const optionRef = useRef<HTMLDivElement | null>(null);
-    const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-    const [isAlignPanelOpen, setIsAlignPanelOpen] = useState(false);
+    const [tournament, setTournament] = useState<ITournamentData | undefined>(undefined);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [isAlignPanelOpen, setIsAlignPanelOpen] = useState(false);
+    const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
 
     const onDetailModalOpen = () => setIsModalOpen(true);
     const onDetailModalClose = () => setIsModalOpen(false);
 
-    useEffect(() => {
-        async function fetchTournamentList() {
-            try {
-                const response = await ax.post("mobile_tm_list.php", {
-                    DATA: JSON.stringify({
-                        pageStart: 0,
-                        pageLimit: 10
-                    }),
-                })
-
-                setTournamentList(response.data.data_list)
-            } catch (e) {
-                setTournamentList([]);
-            }
-        }
-
-        fetchTournamentList();
-    }, [])
-
-    const search = useCallback((e: React.FormEvent) => {
-        e.preventDefault();
-
-        const searchText = e.currentTarget.getElementsByTagName("input")[0].value
-        setTournamentList(tournamentList.filter(t => t.TOURNAMENT_NM?.search(searchText) != -1))
-    }, [tournamentList])
+    const { data } = useQuery({
+        queryKey: ["tournamentList"],
+        queryFn: fetchTournamentList
+    })
 
     return (
         <div className="w-full h-dvh flex flex-col pb-8" style={{ overflowY: isModalOpen ? "hidden" : "scroll" }}>
@@ -105,7 +72,7 @@ function Tournament() {
                                             필터
                                         </button>
                                         <div className="w-40 relative">
-                                            <form onSubmit={search}>
+                                            <form>
                                                 <input type="text" placeholder="검색하기"
                                                     className="w-40 px-2 pr-7 py-2 border-b border-b-gray-300 outline-none"
                                                 />
@@ -128,7 +95,7 @@ function Tournament() {
                     </div>
                     <article className="w-full flex gap-4 flex-wrap">
                         {
-                            tournamentList.length !== 0 && tournamentList.map(t => (
+                            typeof data !== "string" && data?.map(t => (
                                 <div key={t.TOURNAMENT_ID}
                                     className="w-80 h-fit grow"
                                     onClick={() => setTournament(t)}

@@ -17,6 +17,7 @@
     "jsx": "react-jsx",
     "baseUrl" : "./src",
     "paths": {
+      "@apis" : ["./apis"],
       "@type/*" : ["./type/*"],
       "@assets/*" : ["./assets/*"],
       "@common/*" : ["./common/*"],
