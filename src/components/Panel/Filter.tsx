@@ -16,9 +16,9 @@ function FilterPanel({
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
 
-    // if (!isOpen) {
-    //     return <></>
-    // }
+    if (!isOpen) {
+        return <></>
+    }
 
     const onReset = () => {
         setScheduled(false);
@@ -30,6 +30,7 @@ function FilterPanel({
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        onClose();
 
         console.log({
             scheduled,
@@ -64,7 +65,7 @@ function FilterPanel({
         <>
             <div
                 onClick={onClose}
-                className="fixed right-0 top-0 w-dvw h-dvh bg-gray-50/70"
+                className="fixed right-0 top-0 w-dvw h-dvh bg-gray-50/70 z-0"
             />
             <AnimatePresence>
                 <motion.form
@@ -74,7 +75,7 @@ function FilterPanel({
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}
                     transition={{ type: "spring", stiffness: 150, damping: 18 }}
-                    className="fixed right-0 top-0 h-full w-[80%] max-w-sm bg-white z-50 shadow-2xl rounded-l-2xl flex flex-col"
+                    className="fixed right-0 top-0 h-full w-[80%] max-w-sm bg-white z-10 shadow-2xl rounded-l-2xl flex flex-col"
                 >
                     <div className="flex items-center justify-between p-4 border-b border-b-gray-200">
                         <h2 className="text-lg font-semibold">필터</h2>
