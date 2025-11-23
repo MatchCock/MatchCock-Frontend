@@ -1,3 +1,5 @@
+// 1. 날짜 선택 시 커서 마우스 모양으로 변경하기
+
 import { motion, AnimatePresence } from "motion/react";
 import { useState, type FormEvent } from "react";
 
@@ -16,10 +18,6 @@ function FilterPanel({
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
 
-    if (!isOpen) {
-        return <></>
-    }
-
     const onReset = () => {
         setScheduled(false);
         setInProgress(false);
@@ -31,14 +29,6 @@ function FilterPanel({
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         onClose();
-
-        console.log({
-            scheduled,
-            inProgress,
-            completed,
-            from,
-            to
-        })
     }
 
     const onScheduledToggle = () => {
@@ -58,9 +48,14 @@ function FilterPanel({
     }
 
     const onToChange = (e: FormEvent<HTMLInputElement>) => {
+        if(from)
         setTo(e.currentTarget.value)
     }
 
+    if (!isOpen) {
+        return <></>
+    }
+    
     return (
         <>
             <div
@@ -114,7 +109,7 @@ function FilterPanel({
                                             <input type="date"
                                                 value={from}
                                                 onChange={onFromChange}
-                                                className="bg-white px-4 py-2 rounded-2xl border border-zinc-500/50"
+                                                className="bg-white px-4 py-2 rounded-2xl border border-zinc-500/50 cursor-pointer"
                                             />
                                         </span>
                                     </div>
@@ -124,7 +119,7 @@ function FilterPanel({
                                             <input type="date"
                                                 value={to}
                                                 onChange={onToChange}
-                                                className="bg-white px-4 py-2 rounded-2xl border border-zinc-500/50"
+                                                className="bg-white px-4 py-2 rounded-2xl border border-zinc-500/50 cursor-pointer"
                                             />
                                         </span>
                                     </div>
@@ -133,7 +128,6 @@ function FilterPanel({
                         </div>
                     </div>
 
-                    {/* 하단 고정 버튼 */}
                     <div className="p-4 border-t flex gap-2">
                         <button type="reset"
                             className="flex-1 border rounded-lg py-2 cursor-pointer">초기화</button>
