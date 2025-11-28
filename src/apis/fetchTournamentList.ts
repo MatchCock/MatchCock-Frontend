@@ -1,19 +1,30 @@
 import axios from "@apis";
 import type { ITournamentData } from "@type/tournament";
 
-async function fetchTournamentList() : Promise<ITournamentData[] | string> {
-    try {
-        const response = await axios.post("mobile_tm_list.php", {
-            DATA: JSON.stringify({
-                pageStart: 0,
-                pageLimit: 10000
-            }),
-        })
+export type optionsType = {
+    type?: "page" | "infinite" | undefined
+    pageNumber?: number | undefined,
+    cursor?: number | undefined,
+    search?: string | undefined,
+    stateFilter?: string[] | undefined,
+    dateFilter?: {
+        from?: Date,
+        to?: Date,
+    } | undefined,
+    order?: {
+        [key: string]: "asc" | "desc"
+    } | undefined
+}
 
-        return response.data.data_list
+async function fetchTournamentList(options: optionsType): Promise<ITournamentData[] | string> {
+    try {
+        const response = await axios.post("/tournament", options)
+
+        return response.data
     } catch (e) {
         return "서버 오류가 발생했습니다.";
     }
+
 }
 
 export default fetchTournamentList;
