@@ -1,5 +1,9 @@
 import Modal from "react-modal";
 import { IoSearch } from "react-icons/io5";
+import { TbInfinity } from "react-icons/tb";
+import { AiOutlineOrderedList } from "react-icons/ai";
+import { RiScrollToBottomLine, RiScrollToBottomFill } from "react-icons/ri";
+import { AiFillAppstore, AiOutlineAppstore } from "react-icons/ai";
 import { useRef, useState, type FormEvent } from "react";
 import { useQuery } from "@tanstack/react-query"
 
@@ -15,15 +19,15 @@ import type { ITournamentData } from "@type/tournament"
 function Tournament() {
     const optionRef = useRef<HTMLDivElement | null>(null);
     const [type, setType] = useState<"page" | "infinite">("page")
-    const [pageNumber, setPageNumber] = useState<number>(1);
-    const [cursor, setCursor] = useState<number>(0);
+    const [pageNumber,] = useState<number>(1);
+    const [cursor,] = useState<number>(0);
     const [search, setSearch] = useState<string>("")
-    const [stateFilter, setStateFilter] = useState<string[]>([]);
-    const [dateFilter, setDateFilter] = useState<{
+    const [stateFilter,] = useState<string[]>([]);
+    const [dateFilter,] = useState<{
         from?: Date,
         to?: Date
     } | undefined>({})
-    const [order, setOrder] = useState<{
+    const [order,] = useState<{
         [key: string]: "asc" | "desc"
     }>({
 
@@ -37,6 +41,12 @@ function Tournament() {
 
     const onDetailModalOpen = () => setIsModalOpen(true);
     const onDetailModalClose = () => setIsModalOpen(false);
+
+    const onTypeClicked = (_type: "page" | "infinite") => () => {
+        if (_type !== type) {
+            setType(_type);
+        }
+    }
 
     const onSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -86,7 +96,7 @@ function Tournament() {
                             <h1 id="title" className="w-full text-3xl md:text-4xl  font-bold mb-4 text-center md:text-left">
                                 <span className="text-BlushPink">대회</span>를 찾고 계신가요?
                             </h1>
-                            <div id="tip" className="flex flex-col md:flex-row w-full justify-center md:justify-start items-start md:gap-4 mb-2 md:mb-8 text-center md:text-left">
+                            <div id="tip" className="flex flex-col md:flex-row w-full justify-center md:justify-start items-start md:gap-4 mb-2 md:mb-4 text-center md:text-left">
                                 <div className="font-semibold text-black hidden md:block">
                                     <span>Tip</span>
                                 </div>
@@ -94,19 +104,60 @@ function Tournament() {
                                     <p>찾는 배드민턴 대회가 있으신가요?</p>
                                     <p>검색이나 필터를 통해 더 쉽고 빠르게 찾아보세요!</p>
                                 </div>
-                                <div id="option" className="flex w-full md:w-auto mt-4 md:mt-0 justify-center items-center gap-3 mb-2 md:mb-0 relative" ref={optionRef}>
+
+                            </div>
+                            <div className="w-full flex justify-between md:mb-4">
+                                <div className="flex gap-3 justify-end shrink-0">
+                                    {type === "page"
+                                        ? <button
+                                            onClick={onTypeClicked("page")}
+                                            className="flex items-center gap-2 rounded-2xl shadow-2xl bg-black text-white border border-neutral-100 px-4  cursor-pointer">
+                                            <AiFillAppstore className="w-6 h-full" />
+                                            <span>페이지</span>
+                                        </button>
+                                        : <button
+                                            onClick={onTypeClicked("page")}
+                                            className="flex items-center gap-2 rounded-2xl shadow-2xl border border-neutral-100 px-4  text-neutral-400 cursor-pointer">
+                                            <AiFillAppstore className="w-6 h-full" />
+                                            <span>페이지</span>
+                                        </button>
+                                    }
+
+                                    {
+                                        type === "infinite"
+                                            ? <button
+                                                onClick={onTypeClicked("infinite")}
+                                                className="flex items-center gap-2 rounded-2xl shadow-2xl bg-black text-white border border-neutral-100 px-4 cursor-pointer">
+                                                <TbInfinity className="w-6 h-full" />
+                                                <span>무한 스크롤</span>
+                                            </button>
+                                            : <button
+                                                onClick={onTypeClicked("infinite")}
+                                                className="flex items-center gap-2 rounded-2xl shadow-2xl border border-neutral-100 px-4 text-neutral-400 cursor-pointer">
+                                                <TbInfinity className="w-6 h-full" />
+                                                <span>무한 스크롤</span>
+                                            </button>
+                                    }
+
+
+                                </div>
+
+                                <div id="option" className="flex mt-4 md:mt-0 justify-center items-center gap-3 mb-2 md:mb-0 relative shrink-0" ref={optionRef}>
                                     <div className="flex items-center">
-                                        <button
-                                            onClick={() => setIsAlignPanelOpen(true)}
-                                            className="w-10 h-10 cursor-pointer rounded-sm text-xm font-medium text-neutral-500 hover:text-black hover:font-bold">
-                                            정렬
-                                        </button>
-                                        <button
-                                            onClick={() => setIsFilterPanelOpen(true)}
-                                            className="w-10 h-10 cursor-pointer rounded-sm text-xm font-medium text-neutral-500 hover:text-black hover:font-bold">
-                                            필터
-                                        </button>
-                                        <div className="w-40 relative">
+                                        <div className="flex shrink-0">
+                                            <button
+                                                onClick={() => setIsAlignPanelOpen(true)}
+                                                className="w-10 h-10 cursor-pointer rounded-sm text-xm font-medium text-neutral-500 hover:text-black hover:font-bold">
+                                                정렬
+                                            </button>
+                                            <button
+                                                onClick={() => setIsFilterPanelOpen(true)}
+                                                className="w-10 h-10 cursor-pointer rounded-sm text-xm font-medium text-neutral-500 hover:text-black hover:font-bold">
+                                                필터
+                                            </button>
+                                        </div>
+
+                                        <div className="relative shrink-0">
                                             <form onSubmit={onSearchSubmit}>
                                                 <input name="searchText" type="text" placeholder="검색하기"
                                                     className="w-40 px-2 pr-7 py-2 border-b border-b-gray-300 outline-none"
@@ -117,12 +168,13 @@ function Tournament() {
                                                     <IoSearch className="w-6 h-6" />
                                                 </button>
                                             </form>
+                                            <AlignPanel isOpen={isAlignPanelOpen} onClose={() => setIsAlignPanelOpen(false)} />
+                                            <FilterPanel isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
                                         </div>
-                                    </div>
 
-                                    <AlignPanel isOpen={isAlignPanelOpen} onClose={() => setIsAlignPanelOpen(false)} />
-                                    <FilterPanel isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
 
