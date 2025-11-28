@@ -1,7 +1,7 @@
 import Modal from "react-modal";
 import { IoSearch } from "react-icons/io5";
-import { useRef, useState } from "react";
-import { useQuery} from "@tanstack/react-query"
+import { useRef, useState, type FormEvent } from "react";
+import { useQuery } from "@tanstack/react-query"
 
 import { fetchTournamentList } from "@apis";
 import Header from "@common/Header";
@@ -14,6 +14,21 @@ import type { ITournamentData } from "@type/tournament"
 
 function Tournament() {
     const optionRef = useRef<HTMLDivElement | null>(null);
+    const [type, setType] = useState<"page" | "infinite">("page")
+    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [cursor, setCursor] = useState<number>(0);
+    const [search, setSearch] = useState<string>("")
+    const [stateFilter, setStateFilter] = useState<string[]>([]);
+    const [dateFilter, setDateFilter] = useState<{
+        from?: Date,
+        to?: Date
+    } | undefined>({})
+    const [order, setOrder] = useState<{
+        [key: string]: "asc" | "desc"
+    }>({
+
+    })
+
     const [tournament, setTournament] = useState<ITournamentData | undefined>(undefined);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -23,9 +38,29 @@ function Tournament() {
     const onDetailModalOpen = () => setIsModalOpen(true);
     const onDetailModalClose = () => setIsModalOpen(false);
 
+    const onSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget)
+        const searchText = formData.get("searchText") as string
+
+        if (searchText) setSearch(searchText);
+    }
+
     const { data } = useQuery({
-        queryKey: ["tournamentList"],
-        queryFn: fetchTournamentList
+        queryKey: [
+            "tournamentList",
+            {
+                type, pageNumber, cursor,
+                search, stateFilter, dateFilter,
+                order
+            },
+        ],
+        queryFn: () => fetchTournamentList({
+            type, pageNumber, cursor,
+            search, stateFilter, dateFilter,
+            order
+        })
     })
 
     return (
@@ -72,8 +107,8 @@ function Tournament() {
                                             필터
                                         </button>
                                         <div className="w-40 relative">
-                                            <form>
-                                                <input type="text" placeholder="검색하기"
+                                            <form onSubmit={onSearchSubmit}>
+                                                <input name="searchText" type="text" placeholder="검색하기"
                                                     className="w-40 px-2 pr-7 py-2 border-b border-b-gray-300 outline-none"
                                                 />
                                                 <button type="submit"
@@ -87,7 +122,6 @@ function Tournament() {
 
                                     <AlignPanel isOpen={isAlignPanelOpen} onClose={() => setIsAlignPanelOpen(false)} />
                                     <FilterPanel isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
-
                                 </div>
                             </div>
                         </div>
