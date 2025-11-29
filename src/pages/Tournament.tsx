@@ -49,7 +49,7 @@ function Tournament() {
         }
     }
 
-    const pageMove = (_page : number) => () => {
+    const pageMove = (_page: number) => () => {
         setPageNumber(_page);
     }
 
@@ -76,6 +76,8 @@ function Tournament() {
             search, stateFilter, dateFilter,
             order
         }),
+        
+        gcTime : 1000 * 60 * 5,
         enabled: type === "page"
     })
 
@@ -239,7 +241,7 @@ function Tournament() {
                     {(type === "page" && pageData !== undefined && pageData.data?.length !== 0)
                         && (
                             <div className="w-full ">
-                                <Pagenation 
+                                <Pagenation
                                     pageNumber={pageNumber}
                                     lastPageNumber={pageData.lastPage}
                                     pageMove={pageMove}
