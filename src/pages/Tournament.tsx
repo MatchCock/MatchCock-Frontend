@@ -4,8 +4,9 @@ import { TbInfinity } from "react-icons/tb";
 import { AiOutlineOrderedList } from "react-icons/ai";
 import { RiScrollToBottomLine, RiScrollToBottomFill } from "react-icons/ri";
 import { AiFillAppstore, AiOutlineAppstore } from "react-icons/ai";
-import { Fragment, useRef, useState, type FormEvent } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import Spinner from "@assets/images/Spinner.gif"
 
 import { fetchTournamentList } from "@apis";
 import Header from "@common/Header";
@@ -21,7 +22,7 @@ function Tournament() {
     const optionRef = useRef<HTMLDivElement | null>(null);
     const [type, setType] = useState<"page" | "infinite">("page")
     const [pageNumber, setPageNumber] = useState<number>(1);
-    const [cursor,] = useState<number>(0);
+    const [cursor, setCursor] = useState<number>(0);
     const [search, setSearch] = useState<string>("")
     const [stateFilter,] = useState<string[]>([]);
     const [dateFilter,] = useState<{
@@ -62,42 +63,67 @@ function Tournament() {
         if (searchText) setSearch(searchText);
     }
 
-    const { isSuccess: isPageSuccess, data: pageData } = useQuery({
+    const stableQueryParams = useMemo(() => ({
+        type, pageNumber,
+        search, stateFilter, dateFilter, order
+    }), [
+        type, pageNumber, search,
+        JSON.stringify(stateFilter),
+        JSON.stringify(dateFilter),
+        JSON.stringify(order),
+    ]);
+
+    const { isLoading: isPageLoading, isFetching: isPageFetching, data: pageData } = useQuery({
         queryKey: [
             "tournamentList",
-            {
-                type, pageNumber, cursor,
-                search, stateFilter, dateFilter,
-                order
-            },
+            stableQueryParams
         ],
         queryFn: () => fetchTournamentList({
-            type, pageNumber, cursor,
+            type, pageNumber,
             search, stateFilter, dateFilter,
             order
         }),
-        
-        gcTime : 1000 * 60 * 5,
-        enabled: type === "page"
+
+        gcTime: 1000 * 60 * 5,
     })
 
-    const { isSuccess: isInfiniteSuccess, data: infiniteData } = useInfiniteQuery({
+    const stableInfiniteQueryParams = useMemo(() => ({
+        type, cursor, search,
+        stateFilter, dateFilter,
+        order
+    }), [
+        type, pageNumber, cursor, search,
+        JSON.stringify(stateFilter),
+        JSON.stringify(dateFilter),
+        JSON.stringify(order),
+    ]);
+
+    const { isLoading: isInfiniteLoading, isFetching: isInfiniteFetching, data: infiniteData, fetchNextPage } = useInfiniteQuery({
         queryKey: [
             "tournamentList",
-            {
-                type, cursor, search,
-                stateFilter, dateFilter,
-                order
-            }
+            stableInfiniteQueryParams
         ],
-        queryFn: () => fetchTournamentList({
-            type, cursor, search,
-            stateFilter, dateFilter, order
-        }),
+        queryFn: () => fetchTournamentList(stableInfiniteQueryParams),
         initialPageParam: 0,
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         enabled: type === "infinite"
     })
+
+    const bottomRef = useRef(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !isInfiniteLoading && !isInfiniteFetching) {
+                    fetchNextPage()
+                }
+            },
+            { threshold: 1 }
+        )
+
+        if (bottomRef.current) observer.observe(bottomRef.current);
+        return () => observer.disconnect();
+    }, [fetchNextPage])
 
     return (
         <div className="w-full h-dvh flex flex-col pb-8" style={{ overflowY: isModalOpen ? "hidden" : "scroll" }}>
@@ -112,8 +138,8 @@ function Tournament() {
             </Modal>
 
             <Header />
-            <main className="w-full flex flex-col md:items-center">
-                <div id="container" className="w-full flex flex-col max-w-6xl px-6 md:px-2">
+            <main className="w-full grow flex flex-col md:items-center">
+                <div id="container" className="w-full min-h-full flex flex-col max-w-6xl px-6 md:px-2">
                     <div className="flex flex-col md:flex-row items-center">
                         <div className="w-full">
                             <div className="w-full flex justify-center md:justify-start mb-4">
@@ -205,9 +231,19 @@ function Tournament() {
                         </div>
 
                     </div>
-                    <article className="w-full flex gap-4 flex-wrap py-5">
+                    <article className="w-full grow flex gap-4 flex-wrap py-5">
                         {
-                            (type === "page" && isPageSuccess) && pageData.data?.map(tournament => (
+                            ((type === "page" && (isPageLoading || isPageFetching)) || 
+                                (type === "infinite") && (isInfiniteLoading || isInfiniteFetching))
+                            &&
+                            <div className="w-full h-full flex items-center justify-center">
+                                <img alt="loading" src={Spinner} />
+                            </div>
+                        }
+
+                        {
+                            type === "page" &&
+                            pageData?.data?.map(tournament => (
                                 <div key={tournament.TOURNAMENT_ID}
                                     className="w-80 h-fit grow"
                                     onClick={() => setTournament(tournament)}
@@ -220,7 +256,7 @@ function Tournament() {
                             ))
                         }
                         {
-                            (type === "infinite" && isInfiniteSuccess) && infiniteData.pages.map(
+                            type === "infinite" && infiniteData?.pages.map(
                                 (page, i) =>
                                     <Fragment key={i}>
                                         {page.data?.map(tournament => (
@@ -237,6 +273,7 @@ function Tournament() {
                                     </Fragment>
                             )
                         }
+
                     </article>
                     {(type === "page" && pageData !== undefined && pageData.data?.length !== 0)
                         && (
@@ -248,6 +285,7 @@ function Tournament() {
                                 />
                             </div>
                         )}
+                    <button ref={bottomRef} onClick={() => fetchNextPage()} className="h-3 bg-black" />
                 </div>
             </main>
             <footer>
