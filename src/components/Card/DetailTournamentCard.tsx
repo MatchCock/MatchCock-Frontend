@@ -1,5 +1,6 @@
 import { FaCompressAlt } from "react-icons/fa";
 import type { ITournamentData } from "@type/tournament";
+import clsx from "clsx"
 
 interface IProps {
     tournament: ITournamentData | undefined,
@@ -14,7 +15,13 @@ function DetailTournamentCard({
 
     return (
         <div id="tournament-card" className="w-full max-h-full flex flex-col shadow-lg border border-BlushPink/20 shadow-BlushPink/60">
-            <div className="flex flex-col shrink-0 justify-between gap-4 bg-linear-to-r from-BlushPink to-fuchsia-600 px-6 py-5 text-white">
+            <div className={
+                clsx(
+                    "flex flex-col shrink-0 justify-between gap-4 bg-linear-to-r px-6 py-5 text-white",
+                    (tournament.STAT_NM === "신청" || tournament.STAT_NM === "예정") && "from-BlushPink to-fuchsia-600",
+                    (tournament.STAT_NM === "접수" || tournament.STAT_NM === "진행") && "from-RoyalAmethyst to-blue-400",
+                    (tournament.STAT_NM === "완료" && "from-MysticIndigo to-violet-400")
+                )}>
                 <div className="flex w-full justify-between items-center">
                     <div className="shrink-0 pr-5">
                         <span className="text-xl font-bold shrink-0">
