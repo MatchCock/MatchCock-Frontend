@@ -102,7 +102,7 @@ function Tournament() {
             "tournamentList",
             stableInfiniteQueryParams
         ],
-        queryFn: ({pageParam = 0}) => fetchTournamentList({...stableInfiniteQueryParams, cursor : pageParam}),
+        queryFn: ({ pageParam = 0 }) => fetchTournamentList({ ...stableInfiniteQueryParams, cursor: pageParam }),
         initialPageParam: 0,
         getNextPageParam: (lastPage) => {
             return lastPage.data?.nextCursor
@@ -130,9 +130,9 @@ function Tournament() {
         <div className="w-full min-h-dvh flex flex-col" style={{ overflowY: isModalOpen ? "hidden" : "scroll" }}>
             <Modal
                 isOpen={isModalOpen}
-                className="w-full h-full outline-none flex justify-center items-center px-4 md:px-8"
+                className="w-full h-full outline-none flex justify-center items-center py-10 md:py-10 px-4 md:px-8"
             >
-                <div className="md:w-4/5 h-full bg-white border border-BlushPink/20 shadow-lg shadow-RoyalAmethyst/60 rounded-3xl flex gap-4 overflow-y-scroll">
+                <div className="md:w-4/5 max-h-full bg-white border border-BlushPink/20 shadow-lg shadow-RoyalAmethyst/60 rounded-3xl flex gap-4 overflow-y-scroll">
                     <DetailTournamentCard tournament={tournament} exitModal={onDetailModalClose} />
 
                 </div>
@@ -159,18 +159,18 @@ function Tournament() {
                                 </div>
 
                             </div>
-                            <div className="w-full flex justify-between md:mb-4">
+                            <div className="w-full flex flex-wrap justify-center md:justify-between mt-4 md:mb-4">
                                 <div className="flex gap-3 justify-end shrink-0">
                                     {type === "page"
                                         ? <button
                                             onClick={onTypeClicked("page")}
-                                            className="flex items-center gap-2 rounded-2xl shadow-2xl bg-black text-white border border-neutral-100 px-4  cursor-pointer">
+                                            className="flex items-center gap-2 rounded-2xl shadow-2xl bg-black text-white border border-neutral-100 p-3 md:px-4 md:py-0 cursor-pointer">
                                             <AiFillAppstore className="w-6 h-full" />
                                             <span>페이지</span>
                                         </button>
                                         : <button
                                             onClick={onTypeClicked("page")}
-                                            className="flex items-center gap-2 rounded-2xl shadow-2xl border border-neutral-100 px-4  text-neutral-400 cursor-pointer">
+                                            className="flex items-center gap-2 rounded-2xl shadow-2xl border border-neutral-100 p-3 md:px-4 md:py-0  text-neutral-400 cursor-pointer">
                                             <AiFillAppstore className="w-6 h-full" />
                                             <span>페이지</span>
                                         </button>
@@ -232,7 +232,7 @@ function Tournament() {
                         </div>
 
                     </div>
-                    <article className="w-full grow flex gap-4 flex-wrap py-5">
+                    <article className="w-full justify-center items-center md:items-start md:justify-between grow flex gap-4 flex-wrap py-5">
                         {
                             ((type === "page" && (isPageLoading)) ||
                                 (type === "infinite") && (isInfiniteLoading))
@@ -246,7 +246,7 @@ function Tournament() {
                             type === "page" &&
                             pageData?.data?.tournamentList.map(tournament => (
                                 <div key={tournament.TOURNAMENT_ID}
-                                    className="w-80 h-fit grow"
+                                    className="w-full h-auto md:w-80 md:h-90"
                                     onClick={() => setTournament(tournament)}
                                 >
                                     <SummaryTournamentCard
@@ -262,7 +262,7 @@ function Tournament() {
                                     <Fragment key={i}>
                                         {page.data?.tournamentList.map(tournament => (
                                             <div key={tournament.TOURNAMENT_ID}
-                                                className="w-80 h-fit grow"
+                                                className="w-full h-auto md:w-80 md:h-90"
                                                 onClick={() => setTournament(tournament)}
                                             >
                                                 <SummaryTournamentCard
@@ -301,7 +301,7 @@ function Tournament() {
                             <div ref={bottomRef} className="w-full min-h-1 flex justify-center items-center">
                                 {!hasNextPage && "모든 대회목록을 나열하였습니다."}
                             </div>
-    
+
                         )
                     }
                 </div>
