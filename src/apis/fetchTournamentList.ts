@@ -18,10 +18,11 @@ export type optionsType = {
 }
 
 interface IFetchTournamentListData {
-    data?: ITournamentData[],
-    error?: string,
-    lastPage?: number,
-    nextCursor?: number | null
+    data?: {
+        tournamentList: ITournamentData[],
+        lastPage?: number | null,
+        nextCursor?: number | null
+    }
 }
 
 async function fetchTournamentList(options: optionsType): Promise<IFetchTournamentListData> {

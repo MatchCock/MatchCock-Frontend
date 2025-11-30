@@ -3,7 +3,7 @@ import { FaAnglesLeft, FaChevronLeft, FaChevronRight, FaAnglesRight } from "reac
 interface IPagenation {
     pageUnit?: number,
     pageNumber: number,
-    lastPageNumber?: number,
+    lastPageNumber?: number | null | undefined,
     pageMove: (page: number) => () => void,
 }
 export default function Pagenation({
@@ -12,7 +12,7 @@ export default function Pagenation({
     lastPageNumber,
     pageMove
 }: IPagenation) {
-    if (lastPageNumber === undefined) {
+    if (!lastPageNumber) {
         return null
     }
 

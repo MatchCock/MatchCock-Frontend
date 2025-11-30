@@ -22,7 +22,6 @@ function Tournament() {
     const optionRef = useRef<HTMLDivElement | null>(null);
     const [type, setType] = useState<"page" | "infinite">("page")
     const [pageNumber, setPageNumber] = useState<number>(1);
-    const [cursor, setCursor] = useState<number>(0);
     const [search, setSearch] = useState<string>("")
     const [stateFilter,] = useState<string[]>([]);
     const [dateFilter,] = useState<{
@@ -88,11 +87,11 @@ function Tournament() {
     })
 
     const stableInfiniteQueryParams = useMemo(() => ({
-        type, cursor, search,
+        type, search,
         stateFilter, dateFilter,
         order
     }), [
-        type, pageNumber, cursor, search,
+        type, pageNumber, search,
         JSON.stringify(stateFilter),
         JSON.stringify(dateFilter),
         JSON.stringify(order),
@@ -103,9 +102,11 @@ function Tournament() {
             "tournamentList",
             stableInfiniteQueryParams
         ],
-        queryFn: () => fetchTournamentList(stableInfiniteQueryParams),
+        queryFn: ({pageParam = 0}) => fetchTournamentList({...stableInfiniteQueryParams, cursor : pageParam}),
         initialPageParam: 0,
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        getNextPageParam: (lastPage) => {
+            return lastPage.data?.nextCursor
+        },
         enabled: type === "infinite"
     })
 
@@ -243,7 +244,7 @@ function Tournament() {
 
                         {
                             type === "page" &&
-                            pageData?.data?.map(tournament => (
+                            pageData?.data?.tournamentList.map(tournament => (
                                 <div key={tournament.TOURNAMENT_ID}
                                     className="w-80 h-fit grow"
                                     onClick={() => setTournament(tournament)}
@@ -259,7 +260,7 @@ function Tournament() {
                             type === "infinite" && infiniteData?.pages.map(
                                 (page, i) =>
                                     <Fragment key={i}>
-                                        {page.data?.map(tournament => (
+                                        {page.data?.tournamentList.map(tournament => (
                                             <div key={tournament.TOURNAMENT_ID}
                                                 className="w-80 h-fit grow"
                                                 onClick={() => setTournament(tournament)}
@@ -280,12 +281,12 @@ function Tournament() {
             </main>
             <footer className="">
                 <div>
-                    {(type === "page" && pageData !== undefined && pageData.data?.length !== 0)
+                    {(type === "page" && pageData !== undefined && pageData.data?.tournamentList.length !== 0)
                         && (
                             <div className="w-full pb-8">
                                 <Pagenation
                                     pageNumber={pageNumber}
-                                    lastPageNumber={pageData.lastPage}
+                                    lastPageNumber={pageData.data?.lastPage}
                                     pageMove={pageMove}
                                 />
                             </div>
