@@ -132,7 +132,7 @@ function Tournament() {
                 isOpen={isModalOpen}
                 className="w-full h-full outline-none flex justify-center items-center py-10 md:py-10 px-4 md:px-8"
             >
-                <div className="md:w-4/5 max-h-full bg-white border border-BlushPink/20 shadow-lg shadow-RoyalAmethyst/60 rounded-3xl flex gap-4 overflow-y-scroll">
+                <div className="max-w-4xl max-h-full bg-white border border-BlushPink/20 shadow-lg shadow-RoyalAmethyst/60 rounded-3xl flex gap-4 overflow-y-scroll">
                     <DetailTournamentCard tournament={tournament} exitModal={onDetailModalClose} />
 
                 </div>

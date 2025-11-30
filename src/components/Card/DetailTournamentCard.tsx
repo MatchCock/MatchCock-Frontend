@@ -14,7 +14,7 @@ function DetailTournamentCard({
     if (tournament === undefined) return <></>;
 
     return (
-        <div id="tournament-card" className="w-full max-h-full flex flex-col shadow-lg border border-BlushPink/20 shadow-BlushPink/60">
+        <div id="tournament-card" className="w-full max-h-full flex flex-col shadow-lg">
             <div className={
                 clsx(
                     "flex flex-col shrink-0 justify-between gap-4 bg-linear-to-r px-6 py-5 text-white",
@@ -28,7 +28,7 @@ function DetailTournamentCard({
                             {tournament.STAT_NM}
                         </span>
                     </div>
-                    <div>
+                    <div className="shrink px-2">
                         <h2 className="text-lg md:text-2xl font-bold hidden md:block">
                             {tournament.TOURNAMENT_NM}
                         </h2>
@@ -63,7 +63,7 @@ function DetailTournamentCard({
                     )
                 }
                 <section className="w-full xl:w-1/2 flex flex-col p-6 bg-white rounded-2xl xl:overflow-y-auto shrink-0" style={{ "flexGrow": (tournament.POSTER === null && tournament.POSTER2 === null) ? "1" : "0" }}>
-                    <dl className="w-full  flex flex-col grow shrink-0">
+                    <dl className="w-full flex flex-col grow shrink-0">
                         {
                             tournament.TOURNAMENT_NM && (
                                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-12 sm:gap-6 py-2 grow">
