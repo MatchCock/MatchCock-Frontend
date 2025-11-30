@@ -98,7 +98,7 @@ function Tournament() {
         JSON.stringify(order),
     ]);
 
-    const { isLoading: isInfiniteLoading, isFetching: isInfiniteFetching, data: infiniteData, fetchNextPage } = useInfiniteQuery({
+    const { isLoading: isInfiniteLoading, isFetching: isInfiniteFetching, data: infiniteData, fetchNextPage, hasNextPage } = useInfiniteQuery({
         queryKey: [
             "tournamentList",
             stableInfiniteQueryParams
@@ -118,18 +118,18 @@ function Tournament() {
                     fetchNextPage()
                 }
             },
-            { threshold: 1 }
+            { threshold: 0 }
         )
 
         if (bottomRef.current) observer.observe(bottomRef.current);
         return () => observer.disconnect();
-    }, [fetchNextPage])
+    }, [fetchNextPage, isInfiniteFetching, isInfiniteLoading])
 
     return (
-        <div className="w-full h-dvh flex flex-col pb-8" style={{ overflowY: isModalOpen ? "hidden" : "scroll" }}>
+        <div className="w-full min-h-dvh flex flex-col" style={{ overflowY: isModalOpen ? "hidden" : "scroll" }}>
             <Modal
                 isOpen={isModalOpen}
-                className="w-full h-full outline-none flex justify-center items-center p-4 md:p-8"
+                className="w-full h-full outline-none flex justify-center items-center px-4 md:px-8"
             >
                 <div className="md:w-4/5 h-full bg-white border border-BlushPink/20 shadow-lg shadow-RoyalAmethyst/60 rounded-3xl flex gap-4 overflow-y-scroll">
                     <DetailTournamentCard tournament={tournament} exitModal={onDetailModalClose} />
@@ -138,8 +138,8 @@ function Tournament() {
             </Modal>
 
             <Header />
-            <main className="w-full grow flex flex-col md:items-center">
-                <div id="container" className="w-full min-h-full flex flex-col max-w-6xl px-6 md:px-2">
+            <main className="w-full h-full grow shrink-0 flex flex-col md:items-center">
+                <div id="container" className="w-full min-h-full flex flex-col max-w-6xl px-6 md:px-2 grow">
                     <div className="flex flex-col md:flex-row items-center">
                         <div className="w-full">
                             <div className="w-full flex justify-center md:justify-start mb-4">
@@ -233,8 +233,8 @@ function Tournament() {
                     </div>
                     <article className="w-full grow flex gap-4 flex-wrap py-5">
                         {
-                            ((type === "page" && (isPageLoading || isPageFetching)) || 
-                                (type === "infinite") && (isInfiniteLoading || isInfiniteFetching))
+                            ((type === "page" && (isPageLoading)) ||
+                                (type === "infinite") && (isInfiniteLoading))
                             &&
                             <div className="w-full h-full flex items-center justify-center">
                                 <img alt="loading" src={Spinner} />
@@ -270,26 +270,40 @@ function Tournament() {
                                                 />
                                             </div>
                                         ))}
+
                                     </Fragment>
                             )
                         }
 
                     </article>
+                </div>
+            </main>
+            <footer className="">
+                <div>
                     {(type === "page" && pageData !== undefined && pageData.data?.length !== 0)
                         && (
-                            <div className="w-full ">
+                            <div className="w-full pb-8">
                                 <Pagenation
                                     pageNumber={pageNumber}
                                     lastPageNumber={pageData.lastPage}
                                     pageMove={pageMove}
                                 />
                             </div>
-                        )}
-                    <button ref={bottomRef} onClick={() => fetchNextPage()} className="h-3 bg-black" />
-                </div>
-            </main>
-            <footer>
+                        )
+                    }
 
+                </div>
+                <div className="">
+                    {
+                        (type === "infinite" && infiniteData !== undefined && infiniteData.pages.length !== 0)
+                        && (
+                            <div ref={bottomRef} className="w-full min-h-1 flex justify-center items-center">
+                                {!hasNextPage && "모든 대회목록을 나열하였습니다."}
+                            </div>
+    
+                        )
+                    }
+                </div>
             </footer>
         </div >
     )
