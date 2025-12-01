@@ -1,5 +1,9 @@
 import { FaCompressAlt } from "react-icons/fa";
 import type { ITournamentData } from "@type/tournament";
+import Slider from "react-slick"
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 import clsx from "clsx"
 
 interface IProps {
@@ -12,6 +16,14 @@ function DetailTournamentCard({
     exitModal
 }: IProps) {
     if (tournament === undefined) return <></>;
+    var settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        
+    };
 
     return (
         <div id="tournament-card" className="w-full max-h-full flex flex-col shadow-lg">
@@ -48,17 +60,32 @@ function DetailTournamentCard({
             <article className="w-full flex flex-col xl:flex-row bg-gray-100 md:p-4 gap-2">
                 {(tournament.POSTER !== null || tournament.POSTER2 !== null)
                     && (
-                        <section className="w-full xl:w-1/2 flex flex-col bg-white xl:overflow-y-auto">
-                            {(tournament.POSTER !== null) && <img
-                                alt="포스터"
-                                src={tournament.POSTER ?? undefined}
-                                className="w-full object-cover"
-                            />}
-                            {(tournament.POSTER2 !== null) && <img
-                                alt="포스터"
-                                src={tournament.POSTER2 ?? undefined}
-                                className="w-full object-cover"
-                            />}
+                        <section className="w-full h-full px-8 py-8 xl:w-1/2 bg-white rounded-2xl">
+                            <Slider 
+                                {...settings}
+                                className="w-full h-full" 
+                            >
+                                {(tournament.POSTER !== null) &&
+                                    <div className="w-full h-full" onDoubleClick={() => {
+                                        
+                                    }}>
+                                        <img
+                                            alt="포스터"
+                                            src={tournament.POSTER ?? undefined}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                }
+                                {(tournament.POSTER2 !== null) && <div >
+                                    <img
+                                        alt="포스터"
+                                        src={tournament.POSTER2 ?? undefined}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                }
+                            </Slider>
+
                         </section>
                     )
                 }
