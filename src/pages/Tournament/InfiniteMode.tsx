@@ -1,27 +1,22 @@
+import { Fragment, useEffect, useRef, useState, type FormEvent } from "react";
+import clsx from "clsx";
 import Modal from "react-modal";
 import { IoSearch } from "react-icons/io5";
 import { TbInfinity } from "react-icons/tb";
 import { AiFillAppstore } from "react-icons/ai";
-import { Fragment, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import Spinner from "@assets/images/Spinner.gif"
-
-import { fetchTournamentList } from "@apis";
 import Header from "@common/Header";
 import NavigationBar from "@common/NavigationBar";
-import DetailTournamentCard from "@components/Card/DetailTournamentCard"
-import SummaryTournamentCard from "@components/Card/SummaryTournamentCard";
 import AlignPanel from "@components/Panel/Align"
 import FilterPanel from "@components/Panel/Filter"
+import DetailTournamentCard from "@components/Card/DetailTournamentCard"
+import SummaryTournamentCard from "@components/Card/SummaryTournamentCard";
+import Spinner from "@assets/images/Spinner.gif"
+import useTournamentInfiniteQuery from "@hooks/useTournamentInfiniteQuery";
 import type { ITournamentData } from "@type/tournament"
-import Pagenation from "@components/Pagenation";
-import clsx from "clsx";
-import useTournamentQuery from "@hooks/useTournamentQuery";
 
-function Tournament() {
+export default function InfiniteMode() {
     const optionRef = useRef<HTMLDivElement | null>(null);
-    const [type, setType] = useState<"page" | "infinite">("page")
-    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [type, setType] = useState<"page" | "infinite">("infinite")
     const [search, setSearch] = useState<string>("")
     const [stateFilter,] = useState<string[]>([]);
     const [dateFilter,] = useState<{
@@ -32,6 +27,7 @@ function Tournament() {
         [key: string]: "asc" | "desc"
     }>({})
 
+    const bottomRef = useRef(null);
     const [tournament, setTournament] = useState<ITournamentData | undefined>(undefined);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAlignPanelOpen, setIsAlignPanelOpen] = useState(false);
@@ -39,10 +35,6 @@ function Tournament() {
 
     const onDetailModalOpen = () => setIsModalOpen(true);
     const onDetailModalClose = () => setIsModalOpen(false);
-
-    const pageMove = (_page: number) => () => {
-        setPageNumber(_page);
-    }
 
     const onTypeClicked = (_type: "page" | "infinite") => () => {
         if (_type !== type) {
@@ -59,43 +51,16 @@ function Tournament() {
         if (searchText) setSearch(searchText);
     }
 
-    const { isPageLoading, pageData } = useTournamentQuery({
-        type, pageNumber, search, stateFilter, dateFilter, order
-    });
-
-    const stableInfiniteQueryParams = useMemo(() => ({
-        type, search,
-        stateFilter, dateFilter,
-        order
-    }), [
-        type, pageNumber, search,
-        JSON.stringify(stateFilter),
-        JSON.stringify(dateFilter),
-        JSON.stringify(order),
-    ]);
-
-    const { isLoading: isInfiniteLoading, isFetching: isInfiniteFetching, data: infiniteData, fetchNextPage, hasNextPage } = useInfiniteQuery({
-        queryKey: [
-            "tournamentList",
-            stableInfiniteQueryParams
-        ],
-        queryFn: ({ pageParam = 0 }) => fetchTournamentList({ ...stableInfiniteQueryParams, cursor: pageParam }),
-        initialPageParam: 0,
-        getNextPageParam: (lastPage) => {
-            return lastPage.data?.nextCursor
-        },
-        enabled: type === "infinite"
+    const { isInfiniteLoading, isInfiniteFetching, infiniteData, fetchNextPage, hasNextPage } = useTournamentInfiniteQuery({
+        type, search, stateFilter, dateFilter, order
     })
 
-    const bottomRef = useRef(null);
-
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                if (entries[0].isIntersecting && !isInfiniteLoading && !isInfiniteFetching) {
-                    fetchNextPage()
-                }
-            },
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !isInfiniteLoading && !isInfiniteFetching) {
+                fetchNextPage()
+            }
+        },
             { threshold: 0 }
         )
 
@@ -104,10 +69,10 @@ function Tournament() {
     }, [fetchNextPage, isInfiniteFetching, isInfiniteLoading])
 
     return (
-        <div className={clsx("w-full flex flex-col",
-            isModalOpen ? "overflow-y-hidden" : "overflow-y-scroll",
-            type === "infinite" ? "min-h-dvh" : "h-dvh"
-        )}>
+        <div className={
+            clsx("w-full flex flex-col min-h-dvh",
+                isModalOpen ? "overflow-y-hidden" : "overflow-y-scroll",
+            )}>
             <Modal
                 isOpen={isModalOpen}
                 className="w-full h-full outline-none flex justify-center items-center py-10 md:py-10 px-4 md:px-8"
@@ -141,38 +106,18 @@ function Tournament() {
                             </div>
                             <div className="w-full flex flex-wrap justify-center md:justify-between mt-4 md:mb-4">
                                 <div className="flex gap-3 justify-end shrink-0">
-                                    {type === "page"
-                                        ? <button
-                                            onClick={onTypeClicked("page")}
-                                            className="flex items-center gap-2 rounded-2xl shadow-2xl bg-black text-white border border-neutral-100 p-3 md:px-4 md:py-0 cursor-pointer">
-                                            <AiFillAppstore className="w-6 h-full" />
-                                            <span>페이지</span>
-                                        </button>
-                                        : <button
-                                            onClick={onTypeClicked("page")}
-                                            className="flex items-center gap-2 rounded-2xl shadow-2xl border border-neutral-100 p-3 md:px-4 md:py-0  text-neutral-400 cursor-pointer">
-                                            <AiFillAppstore className="w-6 h-full" />
-                                            <span>페이지</span>
-                                        </button>
-                                    }
-
-                                    {
-                                        type === "infinite"
-                                            ? <button
-                                                onClick={onTypeClicked("infinite")}
-                                                className="flex items-center gap-2 rounded-2xl shadow-2xl bg-black text-white border border-neutral-100 px-4 cursor-pointer">
-                                                <TbInfinity className="w-6 h-full" />
-                                                <span>무한 스크롤</span>
-                                            </button>
-                                            : <button
-                                                onClick={onTypeClicked("infinite")}
-                                                className="flex items-center gap-2 rounded-2xl shadow-2xl border border-neutral-100 px-4 text-neutral-400 cursor-pointer">
-                                                <TbInfinity className="w-6 h-full" />
-                                                <span>무한 스크롤</span>
-                                            </button>
-                                    }
-
-
+                                    <button
+                                        onClick={onTypeClicked("page")}
+                                        className="flex items-center gap-2 rounded-2xl shadow-2xl border border-neutral-100 p-3 md:px-4 md:py-0  text-neutral-400 cursor-pointer">
+                                        <AiFillAppstore className="w-6 h-full" />
+                                        <span>페이지</span>
+                                    </button>
+                                    <button
+                                        onClick={onTypeClicked("infinite")}
+                                        className="flex items-center gap-2 rounded-2xl shadow-2xl bg-black text-white border border-neutral-100 px-4 cursor-pointer">
+                                        <TbInfinity className="w-6 h-full" />
+                                        <span>무한 스크롤</span>
+                                    </button>
                                 </div>
 
                                 <div id="option" className="flex mt-4 md:mt-0 justify-center items-center gap-3 mb-2 md:mb-0 relative shrink-0" ref={optionRef}>
@@ -213,27 +158,13 @@ function Tournament() {
 
                     </div>
                     {
-                        ((type === "page" && (isPageLoading)) || (type === "infinite") && (isInfiniteLoading)) ?
+                        ((isInfiniteLoading)) ?
                             (<div className="w-full h-full flex items-center justify-center grow">
                                 <img alt="loading" src={Spinner} />
                             </div>) :
                             (<article className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 place-content-center py-5">
                                 {
-                                    type === "page" &&
-                                    pageData?.data?.tournamentList.map(tournament => (
-                                        <div key={tournament.TOURNAMENT_ID}
-                                            className="w-full h-auto "
-                                            onClick={() => setTournament(tournament)}
-                                        >
-                                            <SummaryTournamentCard
-                                                tournament={tournament}
-                                                onDetailClick={onDetailModalOpen}
-                                            />
-                                        </div>
-                                    ))
-                                }
-                                {
-                                    type === "infinite" && infiniteData?.pages.map(
+                                    infiniteData?.pages.map(
                                         (page, i) =>
                                             <Fragment key={i}>
                                                 {page.data?.tournamentList.map(tournament => (
@@ -251,29 +182,15 @@ function Tournament() {
                                             </Fragment>
                                     )
                                 }
-
-                            </article>)
+                            </article>
+                        )
                     }
                 </div>
             </main>
-            <footer className="">
+            <footer>
                 <div>
-                    {(type === "page" && pageData !== undefined && pageData.data?.tournamentList.length !== 0)
-                        && (
-                            <div className="w-full pb-8">
-                                <Pagenation
-                                    pageNumber={pageNumber}
-                                    lastPageNumber={pageData.data?.lastPage}
-                                    pageMove={pageMove}
-                                />
-                            </div>
-                        )
-                    }
-
-                </div>
-                <div className="">
                     {
-                        (type === "infinite" && infiniteData !== undefined && infiniteData.pages.length !== 0)
+                        (infiniteData !== undefined && infiniteData.pages.length !== 0)
                         && (
                             <div ref={bottomRef} className="w-full min-h-1 flex justify-center items-center">
                                 {!hasNextPage && "모든 대회목록을 나열하였습니다."}
@@ -286,7 +203,5 @@ function Tournament() {
         </div >
     )
 }
-
-export default Tournament;
 
 
