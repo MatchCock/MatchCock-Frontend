@@ -17,6 +17,7 @@ import AlignPanel from "@components/Panel/Align"
 import FilterPanel from "@components/Panel/Filter"
 import type { ITournamentData } from "@type/tournament"
 import Pagenation from "@components/Pagenation";
+import clsx from "clsx";
 
 function Tournament() {
     const optionRef = useRef<HTMLDivElement | null>(null);
@@ -72,7 +73,7 @@ function Tournament() {
         JSON.stringify(order),
     ]);
 
-    const { isLoading: isPageLoading, isFetching: isPageFetching, data: pageData } = useQuery({
+    const { isLoading: isPageLoading, data: pageData } = useQuery({
         queryKey: [
             "tournamentList",
             stableQueryParams
@@ -127,7 +128,10 @@ function Tournament() {
     }, [fetchNextPage, isInfiniteFetching, isInfiniteLoading])
 
     return (
-        <div className="w-full min-h-dvh flex flex-col" style={{ overflowY: isModalOpen ? "hidden" : "scroll" }}>
+        <div className={clsx("w-full flex flex-col",
+            isModalOpen ? "overflow-y-hidden" : "overflow-y-scroll",
+            type === "infinite" ? "min-h-dvh" : "h-dvh"
+        )}>
             <Modal
                 isOpen={isModalOpen}
                 className="w-full h-full outline-none flex justify-center items-center py-10 md:py-10 px-4 md:px-8"
@@ -139,7 +143,7 @@ function Tournament() {
             </Modal>
 
             <Header />
-            <main className="w-full h-full grow shrink-0 flex flex-col md:items-center">
+            <main className="w-full h-full grow shrink-0 flex flex-col md:items-center ">
                 <div id="container" className="w-full max-w-[1700px] min-h-full flex flex-col px-4  grow">
                     <div className="flex flex-col md:flex-row items-center">
                         <div className="w-full">
