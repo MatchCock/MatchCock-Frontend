@@ -19,11 +19,12 @@
     "paths": {
       "@apis" : ["./apis"],
       "@type/*" : ["./type/*"],
+      "@utils/*" : ["./utils/*"],
+      "@pages/*" : ["./pages/*"],
       "@hooks/*" : ["./hooks/*"],
       "@stores/*" : ["./stores/*"],
       "@assets/*" : ["./assets/*"],
       "@common/*" : ["./common/*"],
-      "@pages/*" : ["./pages/*"],
       "@components/*" : ["./components/*"],
     },
 
