@@ -5,17 +5,18 @@
 */
 
 import LogoImage from "@assets/images/Logo.svg"
+import { Link } from "react-router";
 
 function Header() {
     return (
         <header className="sticky w-full h-20 p-5">
-            <div className="w-8 h-8">
+            <Link to="/MatchCock" className="w-8 h-8 block">
                 <img
                     alt="로고"
-                    src={LogoImage} 
+                    src={LogoImage}
                     className="w-full h-full"
                 />
-            </div>
+            </Link>
         </header>
     )
 }

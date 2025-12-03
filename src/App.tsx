@@ -1,14 +1,5 @@
-/* 변경 사항
- * font Pretendard tailwindcss 적용 o
- * color 이름 변경 o
- * header 분리하기 o
- * footer 분리하기
- * 디자인 변경  
- *  1. 아이콘 눌렀을 때 홈으로 이동
- *  2. 버튼 커서 모양 변경
-*/
-
 import Header from "@common/Header"
+import { Link } from "react-router"
 
 function App() {
   return (
@@ -37,9 +28,9 @@ function App() {
             </div>
           </div>
           <div id="buttonWrap" className="w-full">
-            <button className="w-full   font-bold text-white bg-RoyalAmethyst py-4 rounded-xl mb-4 leading-6">
+            <Link to="tournament" className="w-full block text-center font-bold text-white bg-RoyalAmethyst py-4 rounded-xl mb-4 leading-6 cursor-pointer">
               지금 바로 시작하기
-            </button>
+            </Link>
           </div>
           <div id="detail" className="w-full text-[rgba(0,0,0,.65)]  font-light text-xs">
             <table className="w-full border-separate border-spacing border-spacing-4 md:border-spacing-6">
