@@ -1,11 +1,28 @@
-function NavigationBar() {
+import clsx from "clsx";
+import { Link } from "react-router";
+
+interface INavigationBar {
+    current: "tournament" | "club" | "schedule"
+}
+function NavigationBar({
+    current
+}: INavigationBar) {
     return (
         <div className="flex items-center">
-            <button className="font-semibold mr-2 cursor-pointer">대회</button>
+            <Link to="/MatchCock/Tournament" className={clsx(
+                "mr-2 cursor-pointer block",
+                current === "tournament" ? "font-semibold" : "font-light"
+            )}>대회</Link>
             <span className="mr-2">/</span>
-            <button className="font-light mr-2 opacity-50 cursor-pointer">클럽</button>
+            <Link to="/MatchCock/Club" className={clsx(
+                "mr-2 cursor-pointer block",
+                current === "club" ? "font-semibold" : "font-light"
+            )}>클럽</Link>
             <span className="mr-2">/</span>
-            <button className="font-light mr-2 opacity-50 cursor-pointer">스케쥴표</button>
+            <Link to="/MatchCock/Schedule" className={clsx(
+                "mr-2 cursor-pointer block",
+                current === "schedule" ? "font-semibold" : "font-light"
+            )}>스케쥴표</Link>
         </div>
     )
 }

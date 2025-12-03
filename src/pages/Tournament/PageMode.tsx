@@ -67,12 +67,12 @@ function PageMode() {
             </Modal>
 
             <Header />
-            <main className="w-full h-full grow shrink-0 flex flex-col md:items-center ">
+            <main className="w-full h-full grow shrink-0 flex flex-col md:items-center">
                 <div id="container" className="w-full max-w-[1700px] min-h-full flex flex-col px-4  grow">
                     <div className="flex flex-col md:flex-row items-center">
                         <div className="w-full">
                             <div className="w-full flex justify-center md:justify-start mb-4">
-                                <NavigationBar />
+                                <NavigationBar current="tournament" />
                             </div>
                             <h1 id="title" className="w-full text-3xl md:text-4xl  font-bold mb-4 text-center md:text-left">
                                 <span className="text-BlushPink">대회</span>를 찾고 계신가요?

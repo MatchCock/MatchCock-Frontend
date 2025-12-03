@@ -81,7 +81,7 @@ export default function InfiniteMode() {
                     <div className="flex flex-col md:flex-row items-center">
                         <div className="w-full">
                             <div className="w-full flex justify-center md:justify-start mb-4">
-                                <NavigationBar />
+                                <NavigationBar current="tournament"/>
                             </div>
                             <h1 id="title" className="w-full text-3xl md:text-4xl  font-bold mb-4 text-center md:text-left">
                                 <span className="text-BlushPink">대회</span>를 찾고 계신가요?
