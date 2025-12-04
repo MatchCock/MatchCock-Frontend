@@ -59,12 +59,8 @@ html {
 }
 
 @theme {
-    -- : "Pretendard";
-
-    /*  */
     --color-BlushPink : rgb(255, 115, 148);
-
+    --color-FairyBlue : rgb(115, 148, 255);
     --color-MysticIndigo : rgb(118, 108, 255);
-
     --color-RoyalAmethyst : rgb(104,92,255);
 }
