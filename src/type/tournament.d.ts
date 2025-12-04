@@ -44,28 +44,32 @@ export interface ITournamentData {
 }
 
 export interface IMatchData {
-
-    "EVENT_ID": "242",
-    "EVENT_NM": "혼복-50-A",
-    "GENDER": "A",
-    "AGE": "50",
-    "GRADE": "A",
-    "ENTRY_ID": "00000246",
-    "SEED": "0",
-    "PLAYER_ID": "BM_202511301605080491",
-    "CLUB_NM1": "1989",
-    "PLAYER_NM1": "박정근",
+    "EVENT_ID": string | null,
+    "EVENT_NM": string | null,
+    "GENDER": string | null,
+    "AGE": string | null,
+    "GRADE": string | null,
+    "ENTRY_ID": string | null,
+    "SEED": string | null,
+    "PLAYER_ID": string | null,
+    "CLUB_NM1": string | null,
+    "PLAYER_NM1": string | null,,
     "NICK_NM1": null,
-    "GENDER1": "M",
-    "PARTNER_ID": "BM_202511301605080492",
-    "CLUB_NM2": "1989",
-    "PLAYER_NM2": "이정순",
+    "GENDER1": string | null,
+    "PARTNER_ID": string | null,
+    "CLUB_NM2": string | null,
+    "PLAYER_NM2": string | null,
     "NICK_NM2": null,
-    "GENDER2": "F",
-    "REG_DATE": "2025-11-30 16:05:08",
-    "CHG_DATE": "2025-11-30 16:05:08",
-    "POINT_YN": "Y",
-    "ADVANTAGE": "0",
-    "MATCH_OPEN_YN": "N"
+    "GENDER2": string | null,
+    "REG_DATE": string | null,
+    "CHG_DATE": string | null,
+    "POINT_YN": string | null,
+    "ADVANTAGE": string | null,
+    "MATCH_OPEN_YN": string | null,
+}
 
+export type CustomTournamentType = {
+    name: string,
+    teams?: IMatchData[]
+    checked?: boolean | undefined
 }
