@@ -69,12 +69,12 @@ export default function Club() {
                                     <button
                                         className="flex items-center gap-2 rounded-2xl shadow-2xl bg-black text-white border border-neutral-100 p-3 md:px-4 md:py-0 cursor-pointer">
                                         <AiFillAppstore className="w-6 h-full" />
-                                        <span>페이지</span>
+                                        <span>토글</span>
                                     </button>
                                     <button
                                         className="flex items-center gap-2 rounded-2xl shadow-2xl border border-neutral-100 px-4 text-neutral-400 cursor-pointer">
                                         <TbInfinity className="w-6 h-full" />
-                                        <span>무한 스크롤</span>
+                                        <span>모두 펼치기</span>
                                     </button>
                                 </div>
 
