@@ -1,17 +1,18 @@
-import useTournamentStore from "@stores/useTournamentStore";
+import type { orderType } from "@pages/Tournament/PageMode";
 import { motion, AnimatePresence } from "motion/react";
 import { useCallback, useState, type ChangeEvent, type FormEvent } from "react";
 
 interface IProps {
     isOpen: boolean,
+    setOrder : (_order : orderType) => void,
     onClose: () => void
 }
 
 function AlignPanel({
     isOpen,
+    setOrder,
     onClose,
 }: IProps) {
-    const { setOrder } = useTournamentStore();
     const [nameOrder, setNameOrder] = useState("");
     const [dateOrder, setDateOrder] = useState("");
     const [regOrder, setRegOrder] = useState("");

@@ -1,17 +1,18 @@
-// 1. 날짜 선택 시 커서 마우스 모양으로 변경하기
-
-import useTournamentStore from "@stores/useTournamentStore";
+import type { dateFilterType } from "@pages/Tournament/PageMode";
 import { motion, AnimatePresence } from "motion/react";
 import { useState, type FormEvent } from "react";
-import { dateStringToDate } from "@utils/functions";
 
 interface IProps {
     isOpen: boolean,
+    setDateFilter: (_dateFilter: dateFilterType) => void,
+    setStateFilter: (_stateFilter: string[]) => void,
     onClose: () => void
 }
 
 function FilterPanel({
     isOpen,
+    setDateFilter,
+    setStateFilter,
     onClose,
 }: IProps) {
     const [from, setFrom] = useState("");
@@ -19,7 +20,6 @@ function FilterPanel({
     const [scheduled, setScheduled] = useState(false);
     const [inProgress, setInProgress] = useState(false);
     const [completed, setCompleted] = useState(false);
-    const { setDateFilter, setStateFilter } = useTournamentStore();
 
     const onReset = () => {
         setScheduled(false);
@@ -33,16 +33,16 @@ function FilterPanel({
         e.preventDefault();
 
         const stateArray = []
-        if(scheduled) stateArray.push(...["신청", "예정"]);
-        if(inProgress) stateArray.push(...["진행", "접수"]);
-        if(completed) stateArray.push(...["완료", "종료"]);
+        if (scheduled) stateArray.push(...["신청", "예정"]);
+        if (inProgress) stateArray.push(...["진행", "접수"]);
+        if (completed) stateArray.push(...["완료", "종료"]);
 
         setStateFilter(stateArray)
-        setDateFilter({ 
-            from : !from ? undefined : from.split("-").join(""), 
-            to : !to ? undefined : to.split("-").join("")
+        setDateFilter({
+            from: !from ? undefined : from.split("-").join(""),
+            to: !to ? undefined : to.split("-").join("")
         })
-        
+
         onClose();
     }
 
@@ -71,7 +71,7 @@ function FilterPanel({
     if (!isOpen) {
         return <></>
     }
-    
+
     return (
         <>
             <div
