@@ -13,15 +13,31 @@ import SummaryTournamentCard from "@components/Card/SummaryTournamentCard";
 import Spinner from "@assets/images/Spinner.gif"
 import useTournamentInfiniteQuery from "@hooks/useTournamentInfiniteQuery";
 import type { ITournamentData } from "@type/tournament"
-import useTournamentStore from "@stores/useTournamentStore";
 
-export default function InfiniteMode() {
+export type dateFilterType = {
+    from?: string | undefined,
+    to?: string | undefined
+}
+
+export type orderType = {
+    [key: string]: string | undefined
+}
+
+interface IInfiniteMode {
+    type: "page" | "infinite",
+    setType: (_type: "page" | "infinite") => void
+}
+
+export default function InfiniteMode({
+    type, setType
+}: IInfiniteMode) {
     const optionRef = useRef<HTMLDivElement | null>(null);
-    const { type, search, stateFilter, dateFilter, order,
-        setType, setSearch,
-    } = useTournamentStore();
 
     const bottomRef = useRef(null);
+    const [order, setOrder] = useState<orderType>({})
+    const [search, setSearch] = useState<string>("");
+    const [stateFilter, setStateFilter] = useState<string[]>([]);
+    const [dateFilter, setDateFilter] = useState<dateFilterType>({});
     const [tournament, setTournament] = useState<ITournamentData | undefined>(undefined);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAlignPanelOpen, setIsAlignPanelOpen] = useState(false);
@@ -81,7 +97,7 @@ export default function InfiniteMode() {
                     <div className="flex flex-col md:flex-row items-center">
                         <div className="w-full">
                             <div className="w-full flex justify-center md:justify-start mb-4">
-                                <NavigationBar current="tournament"/>
+                                <NavigationBar current="tournament" />
                             </div>
                             <h1 id="title" className="w-full text-3xl md:text-4xl  font-bold mb-4 text-center md:text-left">
                                 <span className="text-BlushPink">대회</span>를 찾고 계신가요?
@@ -138,8 +154,9 @@ export default function InfiniteMode() {
                                                     <IoSearch className="w-6 h-6" />
                                                 </button>
                                             </form>
-                                            <AlignPanel isOpen={isAlignPanelOpen} onClose={() => setIsAlignPanelOpen(false)} />
-                                            <FilterPanel isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
+                                            <AlignPanel setOrder={setOrder} isOpen={isAlignPanelOpen} onClose={() => setIsAlignPanelOpen(false)} />
+                                            <FilterPanel setDateFilter={setDateFilter} setStateFilter={setStateFilter}
+                                             isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
                                         </div>
 
                                     </div>
