@@ -12,7 +12,10 @@ type State = {
     order: {
         [key: string]: string | undefined
     }
-    tournamentId: string | null
+    tournamentId: string | null,
+    clubOrder: {
+        [key: string]: string | undefined
+    }
 }
 
 type Action = {
@@ -22,7 +25,8 @@ type Action = {
     setStateFilter: (_stateFilter: State["stateFilter"]) => void,
     setDateFilter: (_dateFilter: State["dateFilter"]) => void,
     setOrder: (_order: State["order"]) => void,
-    setTournamentId: (_tournamentId: State["tournamentId"]) => void
+    setTournamentId: (_tournamentId: State["tournamentId"]) => void,
+    setClubOrder: (_clubOrder: State["clubOrder"]) => void
 }
 
 const useTournamentStore = create<State & Action>((set) => ({
@@ -32,14 +36,16 @@ const useTournamentStore = create<State & Action>((set) => ({
     stateFilter: [],
     dateFilter: {},
     order: {},
-    tournamentId : "",
+    tournamentId: "",
+    clubOrder: {},
     setType: (_type) => set(() => ({ type: _type })),
     setPageNumber: (_pageNumber) => set(() => ({ pageNumber: _pageNumber })),
     setSearch: (_search) => set(() => ({ search: _search })),
     setStateFilter: (_stateFilter) => set(() => ({ stateFilter: _stateFilter })),
     setDateFilter: (_dateFilter) => set(() => ({ dateFilter: _dateFilter })),
     setOrder: (_order) => set(() => ({ order: _order })),
-    setTournamentId: (_tournamentId) => set(() => ({ tournamentId: _tournamentId }))
+    setTournamentId: (_tournamentId) => set(() => ({ tournamentId: _tournamentId })),
+    setClubOrder: (_clubOrder: State["clubOrder"]) => ({ clubOrder: _clubOrder })
 }))
 
 export default useTournamentStore;

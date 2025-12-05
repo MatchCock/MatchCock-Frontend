@@ -9,9 +9,11 @@ import useTournamentStore from "@stores/useTournamentStore";
 import ClubCard from "@components/Card/ClubCard";
 import { useCallback, useEffect, useState } from "react";
 import type { CustomTournamentType } from "@type/tournament";
+import AlignPanel from "@components/Panel/Club/Align";
 
 export default function Club() {
     const { tournamentId } = useTournamentStore();
+    const [isAlignPanelOpen, setIsAlignPanelOpen] = useState(false);
     const [tournament, setTournament] = useState<CustomTournamentType[]>([]);
     const { isLoading, isFetching, data } = useQuery({
         queryKey: ["clubList", tournamentId],
@@ -82,6 +84,7 @@ export default function Club() {
                                     <div className="flex items-center">
                                         <div className="flex shrink-0">
                                             <button
+                                                onClick={() => setIsAlignPanelOpen(!isAlignPanelOpen)}
                                                 className="w-10 h-10 cursor-pointer rounded-sm text-xm font-medium text-neutral-500 hover:text-black hover:font-bold">
                                                 정렬
                                             </button>
@@ -103,6 +106,7 @@ export default function Club() {
                                                 </button>
                                             </form>
                                         </div>
+                                        <AlignPanel isOpen={isAlignPanelOpen} onClose={() => setIsAlignPanelOpen(false)} />
                                     </div>
                                 </div>
                             </div>
