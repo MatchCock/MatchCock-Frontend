@@ -10,10 +10,12 @@ import ClubCard from "@components/Card/ClubCard";
 import { useCallback, useEffect, useState } from "react";
 import type { CustomTournamentType } from "@type/tournament";
 import AlignPanel from "@components/Panel/Club/Align";
+import FilterPanel from "@components/Panel/Club/Filter";
 
 export default function Club() {
     const { tournamentId } = useTournamentStore();
     const [isAlignPanelOpen, setIsAlignPanelOpen] = useState(false);
+    const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
     const [tournament, setTournament] = useState<CustomTournamentType[]>([]);
     const { isLoading, isFetching, data } = useQuery({
         queryKey: ["clubList", tournamentId],
@@ -89,6 +91,7 @@ export default function Club() {
                                                 정렬
                                             </button>
                                             <button
+                                                onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
                                                 className="w-10 h-10 cursor-pointer rounded-sm text-xm font-medium text-neutral-500 hover:text-black hover:font-bold">
                                                 필터
                                             </button>
@@ -107,6 +110,7 @@ export default function Club() {
                                             </form>
                                         </div>
                                         <AlignPanel isOpen={isAlignPanelOpen} onClose={() => setIsAlignPanelOpen(false)} />
+                                        <FilterPanel isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
                                     </div>
                                 </div>
                             </div>
