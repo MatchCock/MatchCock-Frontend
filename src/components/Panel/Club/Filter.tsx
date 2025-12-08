@@ -13,6 +13,7 @@ function FilterPanel({
 }: IProps) {
     const [selected, setSelected] = useState(false);
     const [unSelected, setUnSelected] = useState(false);
+    const [age, setAge] = useState<number[]>([]);
     const onReset = () => {
 
     }
@@ -23,6 +24,16 @@ function FilterPanel({
 
     const onClickUnSelectedButton = () => {
         setUnSelected(u => !u)
+    }
+
+    const onAgeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const _age = parseInt(e.currentTarget.value, 10)
+
+        if (age.includes(_age)) {
+            setAge(age.filter(a => a !== _age));
+        } else {
+            setAge([...age, _age])
+        }
     }
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -74,31 +85,26 @@ function FilterPanel({
                             </div>
                         </div>
 
-                        <div>
-                            <div className="border-b border-b-gray-100 pb-6">
-                                <h3 className="col-span-2 text-xl font-bold">기간</h3>
-                                <div className="col-span-6 ">
-                                    <div className="grid grid-cols-4 items-center justify-center mb-4">
-                                        <span className="md:col-start-2 col-span-1 text-sx font-semibold">시작</span>
-                                        {/* <span className="col-span-3 md:col-span-2 flex justify-end">
-                                            <input type="date"
-                                                value={from}
-                                                onChange={onFromChange}
-                                                className="bg-white px-4 py-2 rounded-2xl border border-zinc-500/50 cursor-pointer"
-                                            />
-                                        </span> */}
-                                    </div>
-                                    <div className="grid grid-cols-4 items-center">
-                                        <span className="md:col-start-2 col-span-1 text-sx font-semibold">종료</span>
-                                        {/* <span className="col-span-3 md:col-span-2 flex justify-end">
-                                            <input type="date"
-                                                value={to}
-                                                onChange={onToChange}
-                                                className="bg-white px-4 py-2 rounded-2xl border border-zinc-500/50 cursor-pointer"
-                                            />
-                                        </span> */}
-                                    </div>
-                                </div>
+                        <div className="border-b border-b-gray-100 pb-6">
+                            <h3 className="text-xl font-bold mb-2">나이</h3>
+                            <div className="flex justify-end gap-2 flex-wrap">
+                                {
+                                    Array
+                                    .from({ length: 10 }, (_, i) => (i + 1) * 10)
+                                    .map(i => (
+                                        <button
+                                            key={i}
+                                            value={i}
+                                            type="button"
+                                            className={clsx("p-4 py-2 shadow-2xs text-black hover:text-white border border-gray-100/50 cursor-pointer rounded-2xl text-sm",
+                                                !age.includes(i) ? "text-black hover:text-white hover:bg-MysticIndigo" : "text-white bg-MysticIndigo"
+                                            )}
+                                            onClick={onAgeClick}>{i}대</button>
+                                    ))
+                                }
+
+
+
                             </div>
                         </div>
                     </div>
@@ -113,7 +119,7 @@ function FilterPanel({
                         </button>
                     </div>
                 </motion.form>
-            </AnimatePresence>
+            </AnimatePresence >
         </>
     )
 }
