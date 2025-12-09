@@ -2,9 +2,25 @@ import clsx from "clsx";
 import { motion, AnimatePresence } from "motion/react";
 import { useState, type FormEvent } from "react";
 
+export type FilterOptionType = {
+    selected: boolean,
+    unSelected: boolean,
+    age: number[],
+    group: string[],
+    matchName: string[]
+}
+
 interface IProps {
     isOpen: boolean,
-    onClose: () => void
+    onClose: () => void,
+    setFilterOption: (_filterOption: FilterOptionType) => void
+    filterOption: {
+        selected: boolean,
+        unSelected: boolean,
+        age: number[],
+        group: string[],
+        matchName: string[]
+    }
 }
 
 const groupNameArray = ["A조", "B조", "C조", "D조", "초심", "준자강", "자강"]
@@ -12,6 +28,8 @@ const matchNameArray = ["남자복식", "여자복식", "혼합복식"]
 
 function FilterPanel({
     isOpen,
+    filterOption,
+    setFilterOption,
     onClose,
 }: IProps) {
     const [selected, setSelected] = useState(false);
@@ -67,6 +85,13 @@ function FilterPanel({
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        setFilterOption({
+            selected,
+            unSelected,
+            age,
+            group,
+            matchName
+        })
         onClose();
     }
 

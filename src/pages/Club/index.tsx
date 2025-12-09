@@ -11,9 +11,17 @@ import { useCallback, useEffect, useState } from "react";
 import type { CustomTournamentType } from "@type/tournament";
 import AlignPanel from "@components/Panel/Club/Align";
 import FilterPanel from "@components/Panel/Club/Filter";
+import type { FilterOptionType } from "@components/Panel/Club/Filter"
 
 export default function Club() {
     const { tournamentId } = useTournamentStore();
+    const [filterOption, setFilterOption] = useState<FilterOptionType>({
+        selected: false,
+        unSelected: false,
+        age: [],
+        group: [],
+        matchName: []
+    });
     const [isAlignPanelOpen, setIsAlignPanelOpen] = useState(false);
     const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
     const [tournament, setTournament] = useState<CustomTournamentType[]>([]);
@@ -110,7 +118,8 @@ export default function Club() {
                                             </form>
                                         </div>
                                         <AlignPanel isOpen={isAlignPanelOpen} onClose={() => setIsAlignPanelOpen(false)} />
-                                        <FilterPanel isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
+                                        <FilterPanel filterOption={filterOption} setFilterOption={setFilterOption}
+                                            isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
                                     </div>
                                 </div>
                             </div>
