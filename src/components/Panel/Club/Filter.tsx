@@ -7,6 +7,8 @@ interface IProps {
     onClose: () => void
 }
 
+const groupNameArray = ["A조", "B조", "C조", "D조", "초심", "준자강", "자강"]
+
 function FilterPanel({
     isOpen,
     onClose,
@@ -14,6 +16,7 @@ function FilterPanel({
     const [selected, setSelected] = useState(false);
     const [unSelected, setUnSelected] = useState(false);
     const [age, setAge] = useState<number[]>([]);
+    const [group, setGroup] = useState<string[]>([]);
     const onReset = () => {
 
     }
@@ -33,6 +36,15 @@ function FilterPanel({
             setAge(age.filter(a => a !== _age));
         } else {
             setAge([...age, _age])
+        }
+    }
+
+    const onGroupClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const _group = e.currentTarget.value
+        if (group.includes(_group)) {
+            setGroup(group.filter(g => g !== _group));
+        } else {
+            setGroup([...group, _group])
         }
     }
 
@@ -84,27 +96,41 @@ function FilterPanel({
 
                             </div>
                         </div>
-
                         <div className="border-b border-b-gray-100 pb-6">
                             <h3 className="text-xl font-bold mb-2">나이</h3>
                             <div className="flex justify-end gap-2 flex-wrap">
                                 {
                                     Array
-                                    .from({ length: 10 }, (_, i) => (i + 1) * 10)
-                                    .map(i => (
+                                        .from({ length: 10 }, (_, i) => (i + 1) * 10)
+                                        .map(i => (
+                                            <button
+                                                key={i}
+                                                value={i}
+                                                type="button"
+                                                className={clsx("p-4 py-2 shadow-2xs text-black hover:text-white border border-gray-100/50 cursor-pointer rounded-2xl text-sm",
+                                                    !age.includes(i) ? "text-black hover:text-white hover:bg-MysticIndigo" : "text-white bg-MysticIndigo"
+                                                )}
+                                                onClick={onAgeClick}>{i}대</button>
+                                        ))
+                                }
+                            </div>
+                        </div>
+                        <div className="border-b border-b-gray-100 pb-6">
+                            <h3 className="text-xl font-bold mb-2">등급</h3>
+                            <div className="flex justify-end gap-2 flex-wrap">
+                                {
+
+                                    groupNameArray.map(_group => (
                                         <button
-                                            key={i}
-                                            value={i}
+                                            key={_group}
+                                            value={_group}
                                             type="button"
                                             className={clsx("p-4 py-2 shadow-2xs text-black hover:text-white border border-gray-100/50 cursor-pointer rounded-2xl text-sm",
-                                                !age.includes(i) ? "text-black hover:text-white hover:bg-MysticIndigo" : "text-white bg-MysticIndigo"
+                                                !group.includes(_group) ? "text-black hover:text-white hover:bg-fuchsia-300" : "text-white bg-fuchsia-300"
                                             )}
-                                            onClick={onAgeClick}>{i}대</button>
+                                            onClick={onGroupClick}>{_group}</button>
                                     ))
                                 }
-
-
-
                             </div>
                         </div>
                     </div>
