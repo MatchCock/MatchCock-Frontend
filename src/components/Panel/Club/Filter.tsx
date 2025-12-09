@@ -8,6 +8,7 @@ interface IProps {
 }
 
 const groupNameArray = ["A조", "B조", "C조", "D조", "초심", "준자강", "자강"]
+const matchNameArray = ["남자복식", "여자복식", "혼합복식"]
 
 function FilterPanel({
     isOpen,
@@ -17,6 +18,7 @@ function FilterPanel({
     const [unSelected, setUnSelected] = useState(false);
     const [age, setAge] = useState<number[]>([]);
     const [group, setGroup] = useState<string[]>([]);
+    const [matchName, setMatchName] = useState<string[]>([]);
     const onReset = () => {
 
     }
@@ -45,6 +47,15 @@ function FilterPanel({
             setGroup(group.filter(g => g !== _group));
         } else {
             setGroup([...group, _group])
+        }
+    }
+
+    const onMatchNameClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        const _matchName = e.currentTarget.value
+        if (matchName.includes(_matchName)) {
+            setMatchName(matchName.filter(m => m !== _matchName));
+        } else {
+            setMatchName([...matchName, _matchName])
         }
     }
 
@@ -119,7 +130,6 @@ function FilterPanel({
                             <h3 className="text-xl font-bold mb-2">등급</h3>
                             <div className="flex justify-end gap-2 flex-wrap">
                                 {
-
                                     groupNameArray.map(_group => (
                                         <button
                                             key={_group}
@@ -129,6 +139,23 @@ function FilterPanel({
                                                 !group.includes(_group) ? "text-black hover:text-white hover:bg-fuchsia-300" : "text-white bg-fuchsia-300"
                                             )}
                                             onClick={onGroupClick}>{_group}</button>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                        <div className="border-b border-b-gray-100 pb-6">
+                            <h3 className="text-xl font-bold mb-2">복식 유형</h3>
+                            <div className="flex justify-end gap-2 flex-wrap">
+                                {
+                                    matchNameArray.map(_matchName => (
+                                        <button
+                                            key={_matchName}
+                                            value={_matchName}
+                                            type="button"
+                                            className={clsx("p-4 py-2 shadow-2xs text-black hover:text-white border border-gray-100/50 cursor-pointer rounded-2xl text-sm",
+                                                !matchName.includes(_matchName) ? "text-black hover:text-white hover:bg-emerald-300" : "text-white bg-emerald-300"
+                                            )}
+                                            onClick={onMatchNameClick}>{_matchName}</button>
                                     ))
                                 }
                             </div>
