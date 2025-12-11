@@ -39,36 +39,19 @@ export default function Club() {
         return tournament.flatMap(
             club => {
                 const filteredTeams = club.teams?.filter(team => {
-                    if (filterOption.selected && !team.checked) {
-                        return false;
-                    }
-                    if (filterOption.unSelected && !!team.checked) {
-                        return false;
-                    }
-
-                    console.log(`${team.AGE} : ${filterOption.age}`)
-                    console.log(`${filterOption.age.length > 0} ${filterOption.age.findIndex(_age => team.AGE?.indexOf(_age.toString()))}`)
-                    if (filterOption.age.length > 0 && !filterOption.age.some(_age => (team.AGE && team.AGE?.indexOf(_age.toString()) >= 0))) {
-                        return false;
-                    }
-                    if (filterOption.group.length > 0 && team.GRADE && !filterOption.group.includes(team.GRADE)) {
-                        return false;
-                    }
-                    if (filterOption.matchName.length > 0 && team.GENDER && !filterOption.matchName.includes(team.GENDER)) {
-                        return false;
-                    }
-
+                    if (filterOption.selected && !team.checked) return false;
+                    if (filterOption.unSelected && !!team.checked) return false;
+                    if (filterOption.age.length > 0 && !filterOption.age.some(_age => (team.AGE && team.AGE?.indexOf(_age.toString()) >= 0))) return false;
+                    if (filterOption.group.length > 0 && team.GRADE && !filterOption.group.includes(team.GRADE)) return false;
+                    if (filterOption.matchName.length > 0 && team.GENDER && !filterOption.matchName.includes(team.GENDER)) return false;
                     return true;
                 })
 
-                console.log(filteredTeams)
-
-                if (filteredTeams && filteredTeams.length > 0) {
+                if (filteredTeams && filteredTeams.length > 0)
                     return ({
                         name: club.name,
                         teams: filteredTeams
                     })
-                }
 
                 return []
             }
