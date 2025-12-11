@@ -7,7 +7,7 @@ import { IoSearch } from "react-icons/io5";
 import { TbInfinity } from "react-icons/tb";
 import useTournamentStore from "@stores/useTournamentStore";
 import ClubCard from "@components/Card/ClubCard";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CustomTournamentType } from "@type/tournament";
 import AlignPanel from "@components/Panel/Club/Align";
 import FilterPanel from "@components/Panel/Club/Filter";
@@ -30,6 +30,51 @@ export default function Club() {
         queryFn: () => fetchTournament({ tournamentId })
     })
 
+    const isFiltering = useMemo(
+        () => filterOption.selected || filterOption.unSelected || filterOption.age.length !== 0 || filterOption.group.length !== 0 || filterOption.matchName.length !== 0,
+        [filterOption.selected, filterOption.unSelected, filterOption.age, filterOption.group, filterOption.matchName]
+    )
+
+    const filterTournament = useMemo(() => {
+        return tournament.flatMap(
+            club => {
+                const filteredTeams = club.teams?.filter(team => {
+                    if (filterOption.selected && !team.checked) {
+                        return false;
+                    }
+                    if (filterOption.unSelected && !!team.checked) {
+                        return false;
+                    }
+
+                    console.log(`${team.AGE} : ${filterOption.age}`)
+                    console.log(`${filterOption.age.length > 0} ${filterOption.age.findIndex(_age => team.AGE?.indexOf(_age.toString()))}`)
+                    if (filterOption.age.length > 0 && !filterOption.age.some(_age => (team.AGE && team.AGE?.indexOf(_age.toString()) >= 0))) {
+                        return false;
+                    }
+                    if (filterOption.group.length > 0 && team.GRADE && !filterOption.group.includes(team.GRADE)) {
+                        return false;
+                    }
+                    if (filterOption.matchName.length > 0 && team.GENDER && !filterOption.matchName.includes(team.GENDER)) {
+                        return false;
+                    }
+
+                    return true;
+                })
+
+                console.log(filteredTeams)
+
+                if (filteredTeams && filteredTeams.length > 0) {
+                    return ({
+                        name: club.name,
+                        teams: filteredTeams
+                    })
+                }
+
+                return []
+            }
+        )
+    }, [data, tournament, isFiltering, filterOption.selected, filterOption.unSelected, filterOption.age, filterOption.group, filterOption.matchName])
+
     useEffect(() => {
         if (isLoading || isFetching || data === undefined || data.data === undefined || data.data?.tournament === undefined) {
             return undefined;
@@ -40,6 +85,8 @@ export default function Club() {
             teams: club,
         })))
     }, [data, data?.data, setTournament, isLoading, isFetching])
+
+
 
     const onSelectTeam = useCallback((entryId: string | null) => () => {
         if (entryId === null) return;
@@ -126,9 +173,14 @@ export default function Club() {
                         </div>
                     </div>
                     <div id="clubList" className="flex flex-col gap-4">
-                        {tournament !== undefined && tournament?.map(club => (
-                            <ClubCard club={club} onSelectTeam={onSelectTeam} />
-                        ))}
+                        {
+                            isFiltering
+                                ? filterTournament.map(club => (
+                                    <ClubCard club={club} onSelectTeam={onSelectTeam} />
+                                )) : tournament.map(club => (
+                                    <ClubCard club={club} onSelectTeam={onSelectTeam} />
+                                ))
+                        }
 
                     </div>
                 </div>

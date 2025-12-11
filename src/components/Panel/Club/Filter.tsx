@@ -48,10 +48,12 @@ function FilterPanel({
 
     const onClickSelectedButton = () => {
         setSelected(s => !s);
+        if(unSelected) setUnSelected(false);
     }
 
     const onClickUnSelectedButton = () => {
         setUnSelected(u => !u)
+        if(selected) setSelected(false);
     }
 
     const onAgeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
