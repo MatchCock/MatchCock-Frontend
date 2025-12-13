@@ -6,7 +6,7 @@ function App() {
     <div className="w-full h-dvh">
       <Header />
 
-      <main className="w-full h-full md:px-28 flex justify-center items-center ">
+      <main className="w-full h-full md:px-28 flex justify-center items-center">
         <div id="container" className="flex flex-col grow max-w-7xl items-center md:items-start p-5">
           <div id="imageWrap" className="w-20 h-20 mb-8">
             <img src="https://stauter-web-dev.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FImg_main.66654e82.png&w=256&q=100" alt="아이콘" />
