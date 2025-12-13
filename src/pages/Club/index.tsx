@@ -166,9 +166,9 @@ export default function Club() {
                                 <NavigationBar current="club" />
                             </div>
                             <h1 id="title" className="w-full text-3xl md:text-4xl  font-bold mb-4 text-center md:text-left">
-                                원하는 <span className="text-BlushPink">클럽</span>을 선택해주세요
+                                원하는 <span className="text-FairyBlue">클럽</span>을 선택해주세요
                             </h1>
-                            <div id="tip" className="flex flex-col md:flex-row w-full justify-center md:justify-start items-start md:gap-4 mb-2 md:mb-4 text-center md:text-left">
+                            <div id="tip" className="flex flex-col md:flex-row justify-center md:justify-start items-start md:gap-4 mb-2 md:mb-4 text-center md:text-left">
                                 <div className="font-semibold text-black hidden md:block">
                                     <span>Tip</span>
                                 </div>
@@ -176,9 +176,8 @@ export default function Club() {
                                     <p>대회에 출전한 클럽목록을 보고, 원하는 클럽을 선택해보세요</p>
                                     <p>클럽명을 검색하여 더 빠르게 찾을 수도 있습니다!</p>
                                 </div>
-
                             </div>
-                            <div className="w-full flex flex-wrap justify-center md:justify-between mt-4 md:mb-4">
+                            <div className="w-full flex flex-wrap justify-center md:justify-between mb-6">
                                 <div className="flex gap-3 justify-end shrink-0">
                                     <button
                                         onClick={onFoldAllButtonClicked}
@@ -225,7 +224,7 @@ export default function Club() {
                                                 </button>
                                             </form>
                                         </div>
-                                        <AlignPanel setAlignOption={setAlignOption} 
+                                        <AlignPanel setAlignOption={setAlignOption}
                                             isOpen={isAlignPanelOpen} onClose={() => setIsAlignPanelOpen(false)} />
                                         <FilterPanel filterOption={filterOption} setFilterOption={setFilterOption}
                                             isOpen={isFilterPanelOpen} onClose={() => setIsFilterPanelOpen(false)} />
