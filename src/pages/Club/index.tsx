@@ -48,6 +48,10 @@ export default function Club() {
         window.scrollTo(0, document.body.scrollHeight)
     }
 
+    const onMakeScheduleButtonClick = () => {
+        navigate("/MatchCock/Schedule")
+    }
+
     const isFiltering = useMemo(
         () => filterOption.selected || filterOption.unSelected || filterOption.age.length !== 0 || filterOption.group.length !== 0 || filterOption.matchName.length !== 0,
         [filterOption.selected, filterOption.unSelected, filterOption.age, filterOption.group, filterOption.matchName]
@@ -165,14 +169,19 @@ export default function Club() {
     }
 
     return (
-        <div className="w-full flex flex-col min-h-dvh">
+        <div className="w-full flex flex-col min-h-dvh pb-2">
             <Header />
-            <div className="fixed bottom-10 right-5 flex flex-col gap-4">
-                <div className="w-15 h-15 bg-white drop-shadow-black shadow-lg rounded-2xl cursor-pointer opacity-80 hover:opacity-100 hover:scale-105 transition-transform">
-                    <GoMoveToTop onClick={onScrollingTopButton} className="w-full h-full p-4" />
+            <div className="fixed bottom-10 right-5 w-15 flex flex-col gap-4">
+                <div className="w-15 h-15 bg-white drop-shadow-black shadow-lg rounded-2xl cursor-pointer opacity-80 hover:opacity-100 hover:scale-105 transition-transform hover:bg-black">
+                    <GoMoveToTop onClick={onScrollingTopButton} className="w-full h-full p-4 hover:text-white" />
                 </div>
-                <div className="w-15 h-15 bg-white drop-shadow-black shadow-lg rounded-2xl cursor-pointer opacity-80 hover:opacity-100 hover:scale-105 transition-transform">
-                    <GoMoveToBottom onClick={onScrollingBottomButton} className="w-full h-full p-4" />
+                <div className="w-15 h-15 bg-white drop-shadow-black shadow-lg rounded-2xl cursor-pointer opacity-80 hover:opacity-100 hover:scale-105 transition-transform hover:bg-black">
+                    <GoMoveToBottom onClick={onScrollingBottomButton} className="w-full h-full p-4 hover:text-white" />
+                </div>
+                <div className="w-15 h-15 bg-white drop-shadow-black shadow-lg rounded-2xl opacity-80 hover:opacity-100 hover:scale-105 transition-transform hover:bg-RoyalAmethyst">
+                    <button onClick={onMakeScheduleButtonClick} className="w-full h-full text-sm font-bold hover:text-white cursor-pointer">
+                        Make
+                    </button>
                 </div>
             </div>
             <main className="w-full h-full grow shrink-0 flex flex-col md:items-center">
@@ -250,7 +259,7 @@ export default function Club() {
                             </div>
                         </div>
                     </div>
-                    <div id="clubList" className="flex flex-col gap-4">
+                    <div id="clubList" className="flex flex-col gap-4 mb-8">
                         {
                             filterAndAlignTournament.map(club => (
                                 <ClubCard club={club} isFold={!!club.isFold} onFold={onFold(club.name)} onSelectTeam={onSelectTeam} />
