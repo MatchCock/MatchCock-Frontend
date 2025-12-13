@@ -7,7 +7,7 @@ import { IoSearch } from "react-icons/io5";
 import { TbInfinity } from "react-icons/tb";
 import useTournamentStore from "@stores/useTournamentStore";
 import ClubCard from "@components/Card/ClubCard";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import type { CustomTournamentType } from "@type/tournament";
 import AlignPanel, { type AlignOptionType } from "@components/Panel/Club/Align";
 import FilterPanel from "@components/Panel/Club/Filter";
@@ -32,6 +32,7 @@ export default function Club() {
     });
     const [foldAll, setFoldAll] = useState(true);
     const [expandAll, setExPandAll] = useState(false);
+    const [searchText, setSearchText] = useState("");
     const [isAlignPanelOpen, setIsAlignPanelOpen] = useState(false);
     const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
     const [tournament, setTournament] = useState<CustomTournamentType[]>([]);
@@ -52,6 +53,15 @@ export default function Club() {
         navigate("/MatchCock/Schedule")
     }
 
+    const onSearch = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const inputTag = e.currentTarget.firstChild as HTMLInputElement
+        const text = inputTag.value
+
+        setSearchText(text)
+        inputTag.value = ""
+    }
+
     const isFiltering = useMemo(
         () => filterOption.selected || filterOption.unSelected || filterOption.age.length !== 0 || filterOption.group.length !== 0 || filterOption.matchName.length !== 0,
         [filterOption.selected, filterOption.unSelected, filterOption.age, filterOption.group, filterOption.matchName]
@@ -69,6 +79,8 @@ export default function Club() {
                         if (filterOption.age.length > 0 && !filterOption.age.some(_age => (team.AGE && team.AGE?.indexOf(_age.toString()) >= 0))) return false;
                         if (filterOption.group.length > 0 && team.GRADE && !filterOption.group.includes(team.GRADE)) return false;
                         if (filterOption.matchName.length > 0 && team.GENDER && !filterOption.matchName.includes(team.GENDER)) return false;
+                        if (searchText !== "" && (team.PLAYER_NM1?.search(searchText) === -1 && team.PLAYER_NM2?.search(searchText) === -1)) return false;
+
                         return true;
                     })
 
@@ -92,7 +104,7 @@ export default function Club() {
 
                 return 0;
             })
-        , [data, tournament, isFiltering, isSorting,
+        , [data, tournament, searchText, isFiltering, isSorting,
             filterOption.selected, filterOption.unSelected, filterOption.age, filterOption.group, filterOption.matchName,
             alignOption.name, alignOption.total
         ]
@@ -239,9 +251,10 @@ export default function Club() {
                                         </div>
 
                                         <div className="relative shrink-0">
-                                            <form >
-                                                <input name="searchText" type="text" placeholder="검색하기"
-                                                    className="w-40 px-2 pr-7 py-2 border-b border-b-gray-300 outline-none"
+                                            <form onSubmit={onSearch}>
+                                                <input name="searchText" type="text" placeholder="이름을 입력해주세요"
+                                                    maxLength={6}
+                                                    className="w-50 px-2 pr-7 py-2 border-b border-b-gray-300 outline-none font-semibold"
                                                 />
                                                 <button type="submit"
                                                     className="absolute right-0 bottom-0 -translate-y-1/2 cursor-pointer"
