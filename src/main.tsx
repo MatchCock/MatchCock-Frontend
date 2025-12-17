@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router"
 import App from "App";
 import Tournament from '@pages/Tournament/index'
 import Club from "@pages/Club";
+import Schedule from "@pages/Schedule";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')!).render(
           <Route index path="/MatchCock" element={<App />} />
           <Route path="/MatchCock/Tournament" element={<Tournament />} />
           <Route path="/MatchCock/Club" element={<Club />} />
+          <Route path="/MatchCock/Schedule" element={<Schedule />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
