@@ -1,11 +1,11 @@
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import type { CustomTournamentType } from "@type/tournament"
 
 interface IClubCard {
-    isFold : boolean,
+    isFold: boolean,
     club: CustomTournamentType,
-    onFold :() => void,
+    onFold: () => void,
     onSelectTeam: (entryId: string | null) => () => void
 }
 
@@ -16,6 +16,28 @@ export default function ClubCard({
     onSelectTeam
 }: IClubCard) {
     const ref = useRef<HTMLDivElement>(null)
+    const [isSelectAll, setIsSelectAll] = useState(false);
+
+    const onSelectAllButtonClicked = () => {
+        if (club.teams === undefined) return;
+        if (isSelectAll) {
+            club.teams.forEach(team => onSelectTeam(team.ENTRY_ID)());
+        } else {
+            club.teams.forEach(team => {
+                if (!team.checked) onSelectTeam(team.ENTRY_ID)()
+            });
+        }
+
+         setIsSelectAll(flag => !flag)
+    }
+
+    useEffect(() => {
+        if (club.teams?.every(team => team.checked === true)) {
+            setIsSelectAll(true);
+        } else {
+            setIsSelectAll(false)
+        }
+    }, [club])
 
     return (
         <div
@@ -46,8 +68,8 @@ export default function ClubCard({
                 className={"flex flex-col rounded-xl ease-in-out duration-300 overflow-hidden border border-neutral-200"}
             >
                 <div className="grid grid-cols-5 p-3 text-center font-semibold border-b-gray-200 bg-RoyalAmethyst/80 text-white">
-                    <span className="">
-                        <input className="cussor-pointer" type="checkbox" />
+                    <span className="" >
+                        <input className="cussor-pointer" type="checkbox" onClick={onSelectAllButtonClicked} checked={isSelectAll} />
                     </span>
                     <span >
                         나이

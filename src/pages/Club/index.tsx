@@ -139,7 +139,6 @@ export default function Club() {
         } else {
             setSelectedTeams(selectedTeams.filter(team => team !== entryId))
         }
-
         setTournament(_tournament => _tournament.map((t) => ({
             name: t.name,
             isFold: t.isFold,
