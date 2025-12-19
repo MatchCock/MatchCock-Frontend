@@ -1,7 +1,19 @@
 import Header from "@common/Header";
 import NavigationBar from "@common/NavigationBar";
+import useTournamentStore from "@stores/useTournamentStore";
+import { useQuery } from "@tanstack/react-query";
+import fetchGameList from "apis/fetchGameList";
+import Spinner from "@assets/images/Spinner2.gif"
 
 export default function Schedule() {
+    const { tournamentId } = useTournamentStore();
+    const { isLoading, isFetching, isSuccess, data } = useQuery({
+        queryKey: [],
+        queryFn: () => fetchGameList({ tournamentId })
+    })
+
+    
+
     return (
         <div className="w-full flex flex-col min-h-dvh pb-2">
             <Header />
@@ -12,7 +24,7 @@ export default function Schedule() {
                             <div className="w-full flex justify-center md:justify-start mb-4">
                                 <NavigationBar current="schedule" />
                             </div>
-                            <h1 id="title" className="w-full text-3xl md:text-4xl  font-bold mb-4 text-center md:text-left">
+                            <h1 id="title" className="w-ful73l text-3xl md:text-4xl  font-bold mb-4 text-center md:text-left">
                                 <span className="text-FairyBlue">스케쥴표</span>를 꾸미고 저장해보세요!
                             </h1>
                             <div id="tip" className="flex flex-col md:flex-row justify-center md:justify-start items-start md:gap-4 mb-2 md:mb-4 text-center md:text-left">
@@ -36,24 +48,31 @@ export default function Schedule() {
                             </div>
                         </div>
                     </div>
-                    <div id="middle" className="w-full flex justify-center ">
-                        <section id="schedule-table" className="w-full max-w-[800px] shadow-2xl rounded-2xl overflow-hidden">
-                            <article className="w-full grid grid-cols-5 bg-black text-white text-center py-4">
-                                <span>시간</span>
-                                <span>코트</span>
-                                <span>나이</span>
-                                <span>체육관</span>
-                                <span>출전선수</span>
-                            </article>
-                            <article className="w-full grid grid-cols-5 text-center py-4">
-                                <span>25/12/17 18:36</span>
-                                <span>6번</span>
-                                <span>20대</span>
-                                <span>자양초등학교</span>
-                                <span>장동건&장지혜</span>
-                            </article>
-
-                        </section>
+                    <div id="middle" className="w-full h-full flex flex-col grow">
+                        {
+                            (isLoading || isFetching) &&
+                            <div className="w-full h-full grow flex items-center justify-center">
+                                <img alt="loading" src={Spinner} />
+                            </div>
+                        }
+                        {(!isLoading && !isFetching && isSuccess && data) &&
+                            <section id="schedule-table" className="w-full max-w-[800px] shadow-2xl rounded-2xl overflow-hidden">
+                                <article className="w-full grid grid-cols-5 bg-black text-white text-center py-4">
+                                    <span>시간</span>
+                                    <span>코트</span>
+                                    <span>나이</span>
+                                    <span>체육관</span>
+                                    <span>출전선수</span>
+                                </article>
+                                <article className="w-full grid grid-cols-5 text-center py-4">
+                                    <span>25/12/17 18:36</span>
+                                    <span>6번</span>
+                                    <span>20대</span>
+                                    <span>자양초등학교</span>
+                                    <span>장동건&장지혜</span>
+                                </article>
+                            </section>
+                        }
                     </div>
                 </div>
             </main>
