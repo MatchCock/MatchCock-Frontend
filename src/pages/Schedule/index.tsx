@@ -74,7 +74,7 @@ export default function Schedule() {
                                     <span>날짜</span>
                                     <span>시간</span>
                                     <span>코트</span>
-                                    <span>나이</span>
+                                    <span>유형</span>
                                     <span>출전선수 1팀</span>
                                     <span>출전선수 2팀</span>
                                 </article>
