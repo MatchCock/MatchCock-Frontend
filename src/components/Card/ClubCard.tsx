@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import clsx from "clsx";
 import type { CustomTournamentType } from "@type/tournament"
 

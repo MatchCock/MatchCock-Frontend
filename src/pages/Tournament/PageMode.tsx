@@ -14,7 +14,6 @@ import SummaryTournamentCard from "@components/Card/SummaryTournamentCard";
 import Spinner from "@assets/images/Spinner.gif"
 import useTournamentQuery from "@hooks/useTournamentQuery";
 import type { ITournamentData } from "@type/tournament"
-import useTournamentStore from "@stores/useTournamentStore";
 
 export type dateFilterType = {
     from?: string | undefined,
