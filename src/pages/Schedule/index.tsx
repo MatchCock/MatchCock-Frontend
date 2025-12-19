@@ -6,15 +6,15 @@ import fetchGameList from "apis/fetchGameList";
 import Spinner from "@assets/images/Spinner2.gif"
 
 
-function planDateToString(planDate : string) {
+function planDateToString(planDate: string) {
     const year = planDate.slice(0, 4)
     const month = planDate.slice(4, 6)
-    const date = planDate.slice(6,8)
+    const date = planDate.slice(6, 8)
 
     return `${year}년 ${month}월 ${date}일`
 }
 
-function timeToString(time : string) {
+function timeToString(time: string) {
     const [hour, min] = time.split(":")
 
     return `${hour}시 ${min}분`
@@ -50,7 +50,7 @@ export default function Schedule() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-full flex flex-wrap mb-6">
+                        <div className="w-full flex justify-between flex-wrap mb-6">
                             <div className="flex gap-3 shrink-0">
                                 <button className="flex items-center gap-2 shadow-2xl px-4 cursor-pointer bg-white text-black border border-neutral-100 hover:bg-black hover:text-white">
                                     <span>헤더</span>
@@ -59,7 +59,16 @@ export default function Schedule() {
                                     <span>테두리</span>
                                 </button>
                             </div>
+                            <div>
+                                <button className="w-10 h-10 cursor-pointer rounded-sm text-xm font-medium text-neutral-500 hover:text-black hover:font-bold">
+                                    정렬
+                                </button>
+                                <button className="w-10 h-10 cursor-pointer rounded-sm text-xm font-medium text-neutral-500 hover:text-black hover:font-bold">
+                                    필터
+                                </button>
+                            </div>
                         </div>
+
                     </div>
                     <div id="middle" className="w-full h-full flex flex-col items-center grow">
                         {
