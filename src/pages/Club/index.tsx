@@ -17,8 +17,8 @@ import { useNavigate } from "react-router";
 import { GoMoveToTop, GoMoveToBottom } from "react-icons/go";
 
 export default function Club() {
-    const { tournamentId } = useTournamentStore();
     const navigate = useNavigate();
+    const { tournamentId, selectedTeams, setSelectedTeams } = useTournamentStore();
     const [alignOption, setAlignOption] = useState<AlignOptionType>({
         name: "",
         total: "",
@@ -50,6 +50,22 @@ export default function Club() {
     }
 
     const onMakeScheduleButtonClick = () => {
+        const selectedTeams = tournament.reduce<string[]>((acc, cur) => {
+            const entries = cur.teams?.flatMap(team =>
+                team.checked === true
+                    ? ((team.ENTRY_ID === null) ? [] : team.ENTRY_ID)
+                    : []
+            )
+
+            if (entries === undefined)
+                return acc;
+
+            return [...acc, ...entries];
+        }, [])
+
+
+
+        setSelectedTeams(selectedTeams)
         navigate("/MatchCock/Schedule")
     }
 
@@ -129,11 +145,8 @@ export default function Club() {
         })))
     }, [data, data?.data, setTournament, isLoading, isFetching])
 
-
-
     const onSelectTeam = useCallback((entryId: string | null) => () => {
         if (entryId === null) return;
-
         setTournament(_tournament => _tournament.map((t) => ({
             name: t.name,
             isFold: t.isFold,

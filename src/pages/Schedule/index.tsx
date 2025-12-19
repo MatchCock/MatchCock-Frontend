@@ -6,13 +6,11 @@ import fetchGameList from "apis/fetchGameList";
 import Spinner from "@assets/images/Spinner2.gif"
 
 export default function Schedule() {
-    const { tournamentId } = useTournamentStore();
+    const { selectedTeams, tournamentId } = useTournamentStore();
     const { isLoading, isFetching, isSuccess, data } = useQuery({
         queryKey: [],
         queryFn: () => fetchGameList({ tournamentId })
     })
-
-    
 
     return (
         <div className="w-full flex flex-col min-h-dvh pb-2">
@@ -48,7 +46,7 @@ export default function Schedule() {
                             </div>
                         </div>
                     </div>
-                    <div id="middle" className="w-full h-full flex flex-col grow">
+                    <div id="middle" className="w-full h-full flex flex-col items-center grow">
                         {
                             (isLoading || isFetching) &&
                             <div className="w-full h-full grow flex items-center justify-center">
@@ -57,20 +55,26 @@ export default function Schedule() {
                         }
                         {(!isLoading && !isFetching && isSuccess && data) &&
                             <section id="schedule-table" className="w-full max-w-[800px] shadow-2xl rounded-2xl overflow-hidden">
-                                <article className="w-full grid grid-cols-5 bg-black text-white text-center py-4">
+                                <article className="w-full grid grid-cols-5 bg-black text-white text-center px-4 py-4">
                                     <span>시간</span>
                                     <span>코트</span>
                                     <span>나이</span>
-                                    <span>체육관</span>
-                                    <span>출전선수</span>
+                                    <span>출전선수 1팀</span>
+                                    <span>출전선수 2팀</span>
                                 </article>
-                                <article className="w-full grid grid-cols-5 text-center py-4">
-                                    <span>25/12/17 18:36</span>
-                                    <span>6번</span>
-                                    <span>20대</span>
-                                    <span>자양초등학교</span>
-                                    <span>장동건&장지혜</span>
-                                </article>
+                                {
+                                    data && data.gameList && data.gameList.data_list
+                                        .filter(match => selectedTeams.includes(match.TEAM1_ENTRY_ID) || selectedTeams.includes(match.TEAM2_ENTRY_ID))
+                                        .map(match =>
+                                        (<article className="w-full grid grid-cols-5 text-center px-4 py-4">
+                                            <span>{match.CHG_DATE}</span>
+                                            <span>{match.COURT_NO}번</span>
+                                            <span>{match.EVENT_NM}</span>
+                                            <span>{match.T1_PLAYER}</span>
+                                            <span>{match.T2_PLAYER}</span>
+                                        </article>)
+                                        )
+                                }
                             </section>
                         }
                     </div>
