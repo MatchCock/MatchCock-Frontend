@@ -5,6 +5,21 @@ import { useQuery } from "@tanstack/react-query";
 import fetchGameList from "apis/fetchGameList";
 import Spinner from "@assets/images/Spinner2.gif"
 
+
+function planDateToString(planDate : string) {
+    const year = planDate.slice(0, 4)
+    const month = planDate.slice(4, 6)
+    const date = planDate.slice(6,8)
+
+    return `${year}년 ${month}월 ${date}일`
+}
+
+function timeToString(time : string) {
+    const [hour, min] = time.split(":")
+
+    return `${hour}시 ${min}분`
+}
+
 export default function Schedule() {
     const { selectedTeams, tournamentId } = useTournamentStore();
     const { isLoading, isFetching, isSuccess, data } = useQuery({
@@ -55,7 +70,8 @@ export default function Schedule() {
                         }
                         {(!isLoading && !isFetching && isSuccess && data) &&
                             <section id="schedule-table" className="w-full max-w-[800px] shadow-2xl rounded-2xl overflow-hidden">
-                                <article className="w-full grid grid-cols-5 bg-black text-white text-center px-4 py-4">
+                                <article className="w-full grid grid-cols-6 bg-black text-white text-center px-4 py-4">
+                                    <span>날짜</span>
                                     <span>시간</span>
                                     <span>코트</span>
                                     <span>나이</span>
@@ -66,8 +82,9 @@ export default function Schedule() {
                                     data && data.gameList && data.gameList.data_list
                                         .filter(match => selectedTeams.includes(match.TEAM1_ENTRY_ID) || selectedTeams.includes(match.TEAM2_ENTRY_ID))
                                         .map(match =>
-                                        (<article className="w-full grid grid-cols-5 text-center px-4 py-4">
-                                            <span>{match.CHG_DATE}</span>
+                                        (<article className="w-full grid grid-cols-6 text-center px-4 py-4">
+                                            <span>{planDateToString(match.PLAN_DATE)}</span>
+                                            <span>{timeToString(match.START_TIME)}</span>
                                             <span>{match.COURT_NO}번</span>
                                             <span>{match.EVENT_NM}</span>
                                             <span>{match.T1_PLAYER}</span>
