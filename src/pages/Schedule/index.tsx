@@ -79,7 +79,7 @@ export default function Schedule() {
                         }
                         {(!isLoading && !isFetching && isSuccess && data) &&
                             <section id="schedule-table" className="w-full max-w-[800px] shadow-2xl rounded-2xl overflow-hidden">
-                                <article className="w-full grid grid-cols-6 bg-black text-white text-center px-4 py-4">
+                                <article className="w-full grid grid-cols-6 bg-FairyBlue text-white text-center px-4 py-4">
                                     <span>날짜</span>
                                     <span>시간</span>
                                     <span>코트</span>
