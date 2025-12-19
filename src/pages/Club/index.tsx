@@ -50,22 +50,6 @@ export default function Club() {
     }
 
     const onMakeScheduleButtonClick = () => {
-        const selectedTeams = tournament.reduce<string[]>((acc, cur) => {
-            const entries = cur.teams?.flatMap(team =>
-                team.checked === true
-                    ? ((team.ENTRY_ID === null) ? [] : team.ENTRY_ID)
-                    : []
-            )
-
-            if (entries === undefined)
-                return acc;
-
-            return [...acc, ...entries];
-        }, [])
-
-
-
-        setSelectedTeams(selectedTeams)
         navigate("/MatchCock/Schedule")
     }
 
@@ -141,12 +125,21 @@ export default function Club() {
         setTournament(data?.data?.tournament.map(club => ({
             name: club[0].CLUB_NM1 ? club[0].CLUB_NM1 : "noname",
             isFold: true,
-            teams: club,
+            teams: club.map(team => ({
+                ...team,
+                checked: (team.ENTRY_ID !== null && selectedTeams.includes(team.ENTRY_ID)) ? true : false
+            })),
         })))
     }, [data, data?.data, setTournament, isLoading, isFetching])
 
     const onSelectTeam = useCallback((entryId: string | null) => () => {
         if (entryId === null) return;
+        if (!selectedTeams.includes(entryId)) {
+            setSelectedTeams([...selectedTeams, entryId])
+        } else {
+            setSelectedTeams(selectedTeams.filter(team => team !== entryId))
+        }
+
         setTournament(_tournament => _tournament.map((t) => ({
             name: t.name,
             isFold: t.isFold,
@@ -155,7 +148,7 @@ export default function Club() {
                 checked: entryId === team.ENTRY_ID ? !team.checked : (team.checked ?? false)
             })),
         })))
-    }, [setTournament])
+    }, [setTournament, setSelectedTeams, selectedTeams])
 
     const onFold = (name: string) => () => {
         setFoldAll(false);
