@@ -4,6 +4,9 @@ import useTournamentStore from "@stores/useTournamentStore";
 import { useQuery } from "@tanstack/react-query";
 import fetchGameList from "apis/fetchGameList";
 import Spinner from "@assets/images/Spinner2.gif"
+import { AiFillAppstore } from "react-icons/ai";
+import { TbInfinity } from "react-icons/tb";
+import clsx from "clsx";
 
 
 function planDateToString(planDate: string) {
@@ -52,11 +55,19 @@ export default function Schedule() {
                         </div>
                         <div className="w-full flex justify-between flex-wrap mb-6">
                             <div className="flex gap-3 shrink-0">
-                                <button className="flex items-center gap-2 shadow-2xl px-4 cursor-pointer bg-white text-black border border-neutral-100 hover:bg-black hover:text-white">
-                                    <span>헤더</span>
+                                <button
+                                    className={
+                                        clsx("flex items-center gap-2 rounded-2xl shadow-2xl p-3 md:px-4 md:py-0 cursor-pointer", "bg-white text-black border border-neutral-100"
+                                        )}>
+                                    <AiFillAppstore className="w-6 h-full" />
+                                    <span>한번에 보기</span>
                                 </button>
-                                <button className="flex items-center gap-2 shadow-2xl px-3 py-2 cursor-pointer bg-white text-black border border-neutral-100 hover:bg-black hover:text-white">
-                                    <span>테두리</span>
+                                <button
+                                    className={clsx("flex items-center gap-2 rounded-2xl shadow-2xl px-4 cursor-pointer",
+                                        "bg-white text-black border border-neutral-100"
+                                    )}>
+                                    <TbInfinity className="w-6 h-full" />
+                                    <span>나눠서 보기</span>
                                 </button>
                             </div>
                             <div>
@@ -104,8 +115,8 @@ export default function Schedule() {
                             </section>
                         }
                     </div>
-                </div>
-            </main>
-        </div>
+                </div >
+            </main >
+        </div >
     )
 }
