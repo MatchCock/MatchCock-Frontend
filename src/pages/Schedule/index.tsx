@@ -40,20 +40,20 @@ export default function Schedule() {
                             <div className="w-full flex justify-center md:justify-start mb-4">
                                 <NavigationBar current="schedule" />
                             </div>
-                            <h1 id="title" className="w-ful73l text-3xl md:text-4xl  font-bold mb-4 text-center md:text-left">
-                                <span className="text-FairyBlue">스케쥴표</span>를 꾸미고 저장해보세요!
+                            <h1 id="title" className="w-full text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-center md:text-left ">
+                                <span className="text-FairyBlue">스케쥴표</span>를 꾸미고 저장하세요!
                             </h1>
                             <div id="tip" className="flex flex-col md:flex-row justify-center md:justify-start items-start md:gap-4 mb-2 md:mb-4 text-center md:text-left">
                                 <div className="font-semibold text-black hidden md:block">
                                     <span>Tip</span>
                                 </div>
-                                <div className="grow w-full font-semibold text-sx text-neutral-500">
+                                <div className="grow w-full flex flex-col gap-1 font-semibold text-sm md:text-lg text-neutral-500 mb-2 md:mb-0">
                                     <p>선택하신 클럽과 팀의 매치업을 스케쥴표로 만들었어요~!</p>
                                     <p>원하시는 색깔로 꾸민 후 사진으로 다운로드할 수 있어요</p>
                                 </div>
                             </div>
                         </div>
-                        <div className="w-full flex justify-between flex-wrap mb-6">
+                        {/* <div className="w-full flex justify-between flex-wrap mb-6">
                             <div className="flex gap-3 shrink-0">
                                 <button
                                     className={
@@ -78,10 +78,10 @@ export default function Schedule() {
                                     필터
                                 </button>
                             </div>
-                        </div>
+                        </div> */}
 
                     </div>
-                    <div id="middle" className="w-full h-full flex flex-col items-center grow">
+                    <div id="middle" className="w-full h-full flex flex-col items-center justify-center grow">
                         {
                             (isLoading || isFetching) &&
                             <div className="w-full h-full grow flex items-center justify-center">
@@ -90,7 +90,7 @@ export default function Schedule() {
                         }
                         {(!isLoading && !isFetching && isSuccess && data) &&
                             <section id="schedule-table" className="w-full max-w-[800px] shadow-2xl rounded-2xl overflow-hidden">
-                                <article className="w-full grid grid-cols-6 bg-FairyBlue text-white text-center px-4 py-4 font-semibold">
+                                <article className="w-full hidden md:grid md:grid-cols-6 bg-FairyBlue text-white text-center px-4 py-4 font-semibold">
                                     <span>날짜</span>
                                     <span>시간</span>
                                     <span>코트</span>
@@ -102,14 +102,50 @@ export default function Schedule() {
                                     data && data.gameList && data.gameList.data_list
                                         .filter(match => selectedTeams.includes(match.TEAM1_ENTRY_ID) || selectedTeams.includes(match.TEAM2_ENTRY_ID))
                                         .map(match =>
-                                        (<article className="w-full grid grid-cols-6 text-center px-4 py-4 odd:bg-FairyBlue/10">
-                                            <span>{planDateToString(match.PLAN_DATE)}</span>
-                                            <span>{timeToString(match.START_TIME)}</span>
-                                            <span>{match.COURT_NO}번</span>
-                                            <span>{match.EVENT_NM}</span>
-                                            <span>{match.T1_PLAYER}</span>
-                                            <span>{match.T2_PLAYER}</span>
-                                        </article>)
+                                        (
+                                            <>
+                                                <article className="w-full hidden md:grid md:grid-cols-6 text-center px-4 py-4 odd:bg-FairyBlue/10">
+                                                    <span>{planDateToString(match.PLAN_DATE)}</span>
+                                                    <span>{timeToString(match.START_TIME)}</span>
+                                                    <span>{match.COURT_NO}번</span>
+                                                    <span>{match.EVENT_NM}</span>
+                                                    <span>{match.T1_PLAYER}</span>
+                                                    <span>{match.T2_PLAYER}</span>
+                                                </article>
+
+                                            </>
+                                        )
+                                        )
+                                }
+                            </section>
+                        }
+                        {(!isLoading && !isFetching && isSuccess && data) &&
+                            <section id="schedule-table" className="w-full md:hidden shadow-2xl rounded-2xl overflow-hidden">
+                                {
+                                    data && data.gameList && data.gameList.data_list
+                                        .filter(match => selectedTeams.includes(match.TEAM1_ENTRY_ID) || selectedTeams.includes(match.TEAM2_ENTRY_ID))
+                                        .map(match =>
+                                        (
+                                            <article className="w-full flex md:hidden justify-between p-4 odd:bg-FairyBlue/10">
+                                                <div id="left" className="flex flex-col">
+                                                    <div className="text-right">
+                                                        <div>{planDateToString(match.PLAN_DATE)}</div>
+                                                        <div className="flex justify-between">
+                                                            <span>{match.COURT_NO}코트 </span>
+                                                            <span>{match.START_TIME}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-rig">
+                                                        <span>{match.EVENT_NM}</span>
+                                                    </div>
+                                                </div>
+                                                <div id="right" className="flex flex-col items-center">
+                                                    <div>{match.T1_PLAYER}</div>
+                                                    <div>VS</div>
+                                                    <div>{match.T1_PLAYER}</div>
+                                                </div>
+                                            </article>
+                                        )
                                         )
                                 }
                             </section>
@@ -120,3 +156,4 @@ export default function Schedule() {
         </div >
     )
 }
+
