@@ -47,7 +47,7 @@ export default function Schedule() {
                                 <div className="font-semibold text-black hidden md:block">
                                     <span>Tip</span>
                                 </div>
-                                <div className="grow w-full flex flex-col gap-1 font-semibold text-sm md:text-lg text-neutral-500 mb-2 md:mb-0">
+                                <div className="grow w-full flex flex-col gap-1 md:gap-0 font-semibold text-sm md:text-base text-neutral-500 mb-2 md:mb-0">
                                     <p>선택하신 클럽과 팀의 매치업을 스케쥴표로 만들었어요~!</p>
                                     <p>원하시는 색깔로 꾸민 후 사진으로 다운로드할 수 있어요</p>
                                 </div>
