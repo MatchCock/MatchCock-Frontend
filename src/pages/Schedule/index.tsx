@@ -9,12 +9,12 @@ import { TbInfinity } from "react-icons/tb";
 import clsx from "clsx";
 
 
-function planDateToString(planDate: string) {
+function planDateToString(planDate: string, type : string[]) {
     const year = planDate.slice(0, 4)
     const month = planDate.slice(4, 6)
     const date = planDate.slice(6, 8)
 
-    return `${year}년 ${month}월 ${date}일`
+    return `${year}${type[0]}${month}${type[1]}${date}${type[2]}`
 }
 
 function timeToString(time: string) {
@@ -105,7 +105,7 @@ export default function Schedule() {
                                         (
                                             <>
                                                 <article className="w-full hidden md:grid md:grid-cols-6 text-center px-4 py-4 odd:bg-FairyBlue/10">
-                                                    <span>{planDateToString(match.PLAN_DATE)}</span>
+                                                    <span>{planDateToString(match.PLAN_DATE, ["년 ", "월 ", "일"])}</span>
                                                     <span>{timeToString(match.START_TIME)}</span>
                                                     <span>{match.COURT_NO}번</span>
                                                     <span>{match.EVENT_NM}</span>
@@ -120,30 +120,39 @@ export default function Schedule() {
                             </section>
                         }
                         {(!isLoading && !isFetching && isSuccess && data) &&
-                            <section id="schedule-table" className="w-full md:hidden shadow-2xl rounded-2xl overflow-hidden">
+                            <section id="schedule-table" className="w-full md:hidden">
                                 {
                                     data && data.gameList && data.gameList.data_list
                                         .filter(match => selectedTeams.includes(match.TEAM1_ENTRY_ID) || selectedTeams.includes(match.TEAM2_ENTRY_ID))
                                         .map(match =>
                                         (
-                                            <article className="w-full flex md:hidden justify-between p-4 odd:bg-FairyBlue/10">
-                                                <div id="left" className="flex flex-col">
-                                                    <div className="text-right">
-                                                        <div>{planDateToString(match.PLAN_DATE)}</div>
-                                                        <div className="flex justify-between">
-                                                            <span>{match.COURT_NO}코트 </span>
-                                                            <span>{match.START_TIME}</span>
+                                            <article className="w-full flex flex-col md:hidden mb-4 max-w-[300px] mx-auto shadow-xl rounded-lg overflow-hidden border border-gray-100">
+                                                <div className="px-4 py-2 font-semibold text-sm flex justify-between">
+                                                    <div>Court {match.COURT_NO}</div>
+                                                    <div>{planDateToString(match.PLAN_DATE, ["/", "/", ""])} {match.START_TIME}</div>
+                                                </div>
+                                                <div className="w-full flex flex-wrap justify-between  rounded-bl-2xl rounded-br-2xl overflow-hidden relative">
+                                                    <div className="grow flex">
+                                                        <div className="w-full flex flex-col items-center justify-center min-h-12 px-2 text-sm font-semibold bg-blue-200/10">
+                                                            {match.T1_PLAYER.split("/").map(player => <div>{player}</div>)}
+                                                        </div>
+                                                        <div className="[writing-mode:vertical-lr] bg-FairyBlue/80 text-white font-bold px-4 py-2">
+                                                            Team 1
                                                         </div>
                                                     </div>
-                                                    <div className="text-rig">
-                                                        <span>{match.EVENT_NM}</span>
+                                                    <div className="flex flex-col text-black justify-center px-2 items-center font-semibold">
+                                                        <span>v</span>
+                                                        <span>s</span>
                                                     </div>
+                                                    <div className="grow flex">
+                                                        <div className="[writing-mode:vertical-lr] rotate-180 bg-BlushPink/80 text-white font-bold px-4 py-2 ">Team 2</div>
+                                                        <div className="w-full flex flex-col items-center justify-center min-h-12 px-2 text-sm font-semibold bg-pink-300/10">
+                                                            {match.T2_PLAYER.split("/").map(player => <div>{player}</div>)}
+                                                        </div>
+                                                    </div>
+
                                                 </div>
-                                                <div id="right" className="flex flex-col items-center">
-                                                    <div>{match.T1_PLAYER}</div>
-                                                    <div>VS</div>
-                                                    <div>{match.T1_PLAYER}</div>
-                                                </div>
+
                                             </article>
                                         )
                                         )
