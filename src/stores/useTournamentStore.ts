@@ -14,7 +14,7 @@ const useTournamentStore = create<State & Action>((set) => ({
     tournamentId: null,
     selectedTeams: [],
     setTournamentId: (_tournamentId) => set(() => ({ tournamentId: _tournamentId })),
-    setSelectedTeams: (_selectedTeams) => set(() => ({ selectedTeams: _selectedTeams }))
+    setSelectedTeams: (_selectedTeams) => set((state) => ({ selectedTeams: [...state.selectedTeams, ..._selectedTeams] }))
 }))
 
 export default useTournamentStore;

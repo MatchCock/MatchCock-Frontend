@@ -6,14 +6,14 @@ interface IClubCard {
     isFold: boolean,
     club: CustomTournamentType,
     onFold: () => void,
-    onSelectTeam: (entryId: string | null) => () => void
+    onSelectTeam: (entryId: string | null) => () => void,
 }
 
 export default function ClubCard({
     club,
     isFold,
     onFold,
-    onSelectTeam
+    onSelectTeam,
 }: IClubCard) {
     const ref = useRef<HTMLDivElement>(null)
     const [isSelectAll, setIsSelectAll] = useState(false);
@@ -21,14 +21,17 @@ export default function ClubCard({
     const onSelectAllButtonClicked = () => {
         if (club.teams === undefined) return;
         if (isSelectAll) {
-            club.teams.forEach(team => onSelectTeam(team.ENTRY_ID)());
+            club.teams?.forEach(team => {
+                if(team.ENTRY_ID) onSelectTeam(team.ENTRY_ID)();
+            })
         } else {
-            club.teams.forEach(team => {
-                if (!team.checked) onSelectTeam(team.ENTRY_ID)()
-            });
+            club.teams?.forEach(team => {
+                if(team.ENTRY_ID && !team.checked) onSelectTeam(team.ENTRY_ID)();
+            })
         }
-
-         setIsSelectAll(flag => !flag)
+        
+        
+        setIsSelectAll(flag => !flag)
     }
 
     useEffect(() => {

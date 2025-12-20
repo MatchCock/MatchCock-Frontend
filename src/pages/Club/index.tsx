@@ -134,11 +134,15 @@ export default function Club() {
 
     const onSelectTeam = useCallback((entryId: string | null) => () => {
         if (entryId === null) return;
+
+
         if (!selectedTeams.includes(entryId)) {
-            setSelectedTeams([...selectedTeams, entryId])
+            const tempSelectedTeams = new Set(selectedTeams)
+            setSelectedTeams([...tempSelectedTeams, entryId])
         } else {
             setSelectedTeams(selectedTeams.filter(team => team !== entryId))
         }
+
         setTournament(_tournament => _tournament.map((t) => ({
             name: t.name,
             isFold: t.isFold,
