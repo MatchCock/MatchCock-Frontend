@@ -48,15 +48,15 @@ export default function ClubCard({
             className={clsx("max-w-dvw overflow-hidden border border-neutral-200 rounded-2xl px-4 shadow-sm hover:shadow-md transition-all ease-in duration-200",
                 !isFold ? "py-4" : "pt-4 pb-0"
             )}>
-            <div className="flex justify-between items-center cursor-pointer mb-4">
+            <div className="flex flex-col md:flex-row justify-between items-center cursor-pointer mb-4">
                 <div id="left">
                     <h2 className="text-xl font-bold">{club.name}</h2>
                 </div>
-                <div id="right" className="w-80 flex justify-">
-                    <div className="flex grid-cols-3 gap-2">
-                        <span className="bg-RoyalAmethyst col-span-1 text-white rounded-2xl px-3 py-1">Total : {club.teams?.length ?? 0}</span>
-                        <span className="bg-FairyBlue  col-span-1 text-white rounded-2xl px-3 py-1">Select : {club.teams?.reduce((acc, cur) => acc + (cur.checked ? 1 : 0), 0)}</span>
-                        <span className="bg-BlushPink col-span-1 text-white rounded-2xl px-3 py-1">UnSelect : {club.teams?.reduce((acc, cur) => acc + (cur.checked ? 0 : 1), 0)}</span>
+                <div id="right" className="w-80 flex justify-center md:justify-between">
+                    <div className="flex grid-cols-3 gap-2 mt-3 md:mt-0">
+                        <span className="bg-RoyalAmethyst col-span-1 text-white rounded-2xl text-sm md:text-base px-3 py-1">Total : {club.teams?.length ?? 0}</span>
+                        <span className="bg-FairyBlue  col-span-1 text-white rounded-2xl text-sm md:text-base px-3 py-1">Select : {club.teams?.reduce((acc, cur) => acc + (cur.checked ? 1 : 0), 0)}</span>
+                        <span className="bg-BlushPink col-span-1 text-white rounded-2xl text-sm md:text-base px-3 py-1">UnSelect : {club.teams?.reduce((acc, cur) => acc + (cur.checked ? 0 : 1), 0)}</span>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@ export default function ClubCard({
                 onClick={(e) => e.stopPropagation()}
                 className={"flex flex-col rounded-xl ease-in-out duration-300 overflow-hidden border border-neutral-200"}
             >
-                <div className="grid grid-cols-5 p-3 text-center font-semibold border-b-gray-200 bg-RoyalAmethyst/80 text-white">
+                <div className="grid grid-cols-4 md:grid-cols-5 p-3 text-center font-semibold border-b-gray-200 bg-RoyalAmethyst/80 text-white">
                     <span className="" >
                         <input className="cussor-pointer" type="checkbox" onClick={onSelectAllButtonClicked} checked={isSelectAll} />
                     </span>
@@ -80,7 +80,7 @@ export default function ClubCard({
                     <span >
                         등급
                     </span>
-                    <span >
+                    <span className="hidden md:flex">
                         복식 유형
                     </span>
                     <span>
@@ -91,7 +91,7 @@ export default function ClubCard({
                     <div
                         key={team.ENTRY_ID}
                         onClick={onSelectTeam(team.ENTRY_ID)}
-                        className={clsx("grid grid-cols-5 p-3 cursor-pointer text-center ",
+                        className={clsx("grid grid-cols-4 md:grid-cols-5 p-3 cursor-pointer text-center ",
                             team.checked ? "bg-black/70 text-white" : "bg-white text-black"
                         )}
                     >
@@ -104,7 +104,7 @@ export default function ClubCard({
                         <span>
                             {team.GRADE}조
                         </span>
-                        <span>
+                        <span className="hidden md:flex">
                             {team.GENDER === "A" ? "혼복" :
                                 team.GENDER === "M" ? "남복" : "여복"
                             }
