@@ -18,6 +18,7 @@ import { GoMoveToTop, GoMoveToBottom } from "react-icons/go";
 
 export default function Club() {
     const navigate = useNavigate();
+    const [checked, setChecked] = useState<string[]>([]);
     const { tournamentId, selectedTeams, setSelectedTeams } = useTournamentStore();
     const [alignOption, setAlignOption] = useState<AlignOptionType>({
         name: "",
@@ -134,6 +135,12 @@ export default function Club() {
 
     const onSelectTeam = useCallback((entryId: string | null) => () => {
         if (entryId === null) return;
+
+        if (checked.includes(entryId)) {
+            setChecked(_checked => _checked.filter(c => c !== entryId));
+        } else {
+            setChecked(_checked => ([..._checked, entryId]))
+        }
 
 
         if (!selectedTeams.includes(entryId)) {
@@ -284,7 +291,7 @@ export default function Club() {
                     <div id="clubList" className="flex flex-col gap-4 mb-8">
                         {
                             filterAndAlignTournament.map(club => (
-                                <ClubCard club={club} isFold={!!club.isFold} onFold={onFold(club.name)} onSelectTeam={onSelectTeam} />
+                                <ClubCard club={club} checkedList={checked} setCheckedList={setChecked} isFold={!!club.isFold} onFold={onFold(club.name)} onSelectTeam={onSelectTeam} />
                             ))
                         }
 

@@ -5,6 +5,8 @@ import type { CustomTournamentType } from "@type/tournament"
 interface IClubCard {
     isFold: boolean,
     club: CustomTournamentType,
+    checkedList : string[],
+    setCheckedList : React.Dispatch<React.SetStateAction<string[]>>,
     onFold: () => void,
     onSelectTeam: (entryId: string | null) => () => void,
 }
@@ -12,6 +14,8 @@ interface IClubCard {
 export default function ClubCard({
     club,
     isFold,
+    checkedList,
+    setCheckedList,
     onFold,
     onSelectTeam,
 }: IClubCard) {
@@ -21,10 +25,15 @@ export default function ClubCard({
     const onSelectAllButtonClicked = () => {
         if (club.teams === undefined) return;
         if (isSelectAll) {
+            setCheckedList(_checkedList => _checkedList.filter(entry => !club.teams?.map(team => team.ENTRY_ID).includes(entry)))
             club.teams?.forEach(team => {
                 if(team.ENTRY_ID) onSelectTeam(team.ENTRY_ID)();
             })
         } else {
+            const newCheckedList = new Set(checkedList);
+            club.teams.forEach(team => team.ENTRY_ID !== null && newCheckedList.add(team.ENTRY_ID))
+            setCheckedList(_checkedList => [...newCheckedList])
+
             club.teams?.forEach(team => {
                 if(team.ENTRY_ID && !team.checked) onSelectTeam(team.ENTRY_ID)();
             })
@@ -87,16 +96,16 @@ export default function ClubCard({
                         출전 선수
                     </span>
                 </div>
-                {club.teams && club.teams.map(team => (
+                {club.teams && club.teams.map(team => team.ENTRY_ID !== null && (
                     <div
                         key={team.ENTRY_ID}
                         onClick={onSelectTeam(team.ENTRY_ID)}
                         className={clsx("grid grid-cols-4 md:grid-cols-5 p-3 cursor-pointer text-center ",
-                            team.checked ? "bg-black/70 text-white" : "bg-white text-black"
+                            checkedList.includes(team.ENTRY_ID) ? "bg-black/70 text-white" : "bg-white text-black"
                         )}
                     >
                         <span>
-                            <input className="cusor-pointer" type="checkbox" checked={team.checked ?? false} />
+                            <input className="cusor-pointer" type="checkbox" checked={checkedList.includes(team.ENTRY_ID)} />
                         </span>
                         <span>
                             {team.AGE}대
