@@ -15,10 +15,10 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route index path="/MatchCock" element={<App />} />
-          <Route path="/MatchCock/Tournament" element={<Tournament />} />
-          <Route path="/MatchCock/Club" element={<Club />} />
-          <Route path="/MatchCock/Schedule" element={<Schedule />} />
+          <Route index path="/MatchCock-Frontend" element={<App />} />
+          <Route path="/MatchCock-Frontend/Tournament" element={<Tournament />} />
+          <Route path="/MatchCock-Frontend/Club" element={<Club />} />
+          <Route path="/MatchCock-Frontend/Schedule" element={<Schedule />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

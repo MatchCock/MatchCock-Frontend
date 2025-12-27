@@ -4,10 +4,6 @@ import useTournamentStore from "@stores/useTournamentStore";
 import { useQuery } from "@tanstack/react-query";
 import fetchGameList from "apis/fetchGameList";
 import Spinner from "@assets/images/Spinner2.gif"
-import { AiFillAppstore } from "react-icons/ai";
-import { TbInfinity } from "react-icons/tb";
-import clsx from "clsx";
-
 
 function planDateToString(planDate: string, type : string[]) {
     const year = planDate.slice(0, 4)

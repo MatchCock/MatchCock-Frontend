@@ -7,7 +7,7 @@ import { IoSearch } from "react-icons/io5";
 import { TbInfinity } from "react-icons/tb";
 import useTournamentStore from "@stores/useTournamentStore";
 import ClubCard from "@components/Card/ClubCard";
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import type { CustomTournamentType } from "@type/tournament";
 import AlignPanel, { type AlignOptionType } from "@components/Panel/Club/Align";
 import FilterPanel from "@components/Panel/Club/Filter";
@@ -51,7 +51,7 @@ export default function Club() {
     }
 
     const onMakeScheduleButtonClick = () => {
-        navigate("/MatchCock/Schedule")
+        navigate("/MatchCock-Frontend/Schedule")
     }
 
     const onSearch = (e: FormEvent<HTMLFormElement>) => {
@@ -114,7 +114,7 @@ export default function Club() {
     useEffect(() => {
         if (tournamentId === null) {
             alert("대회가 선택되지 않았습니다.")
-            navigate("/MatchCock/Tournament")
+            navigate("/MatchCock-Frontend/Tournament")
         }
     }, [tournamentId])
 
