@@ -24,7 +24,7 @@ function timeToString(time: string) {
 }
 
 export default function Schedule() {
-    const { selectedTeams, tournamentId } = useTournamentStore();
+    const { checked, tournamentId } = useTournamentStore();
     const { isLoading, isFetching, isSuccess, data } = useQuery({
         queryKey: [],
         queryFn: () => fetchGameList({ tournamentId })
@@ -100,7 +100,7 @@ export default function Schedule() {
                                 </article>
                                 {
                                     data && data.gameList && data.gameList.data_list
-                                        .filter(match => selectedTeams.includes(match.TEAM1_ENTRY_ID) || selectedTeams.includes(match.TEAM2_ENTRY_ID))
+                                        .filter(match => checked.includes(match.TEAM1_ENTRY_ID) || checked.includes(match.TEAM2_ENTRY_ID))
                                         .map(match =>
                                         (
                                             <>
@@ -123,7 +123,7 @@ export default function Schedule() {
                             <section id="schedule-table" className="w-full md:hidden">
                                 {
                                     data && data.gameList && data.gameList.data_list
-                                        .filter(match => selectedTeams.includes(match.TEAM1_ENTRY_ID) || selectedTeams.includes(match.TEAM2_ENTRY_ID))
+                                        .filter(match => checked.includes(match.TEAM1_ENTRY_ID) || checked.includes(match.TEAM2_ENTRY_ID))
                                         .map(match =>
                                         (
                                             <article className="w-full flex flex-col md:hidden mb-4 max-w-[300px] mx-auto shadow-xl rounded-lg overflow-hidden border border-gray-100">

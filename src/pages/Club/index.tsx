@@ -18,8 +18,8 @@ import { GoMoveToTop, GoMoveToBottom } from "react-icons/go";
 
 export default function Club() {
     const navigate = useNavigate();
-    const [checked, setChecked] = useState<string[]>([]);
-    const { tournamentId, selectedTeams, setSelectedTeams } = useTournamentStore();
+    const [] = useState<string[]>([]);
+    const { tournamentId, checked, setChecked } = useTournamentStore();
     const [alignOption, setAlignOption] = useState<AlignOptionType>({
         name: "",
         total: "",
@@ -126,40 +126,11 @@ export default function Club() {
         setTournament(data?.data?.tournament.map(club => ({
             name: club[0].CLUB_NM1 ? club[0].CLUB_NM1 : "noname",
             isFold: true,
-            teams: club.map(team => ({
-                ...team,
-                checked: (team.ENTRY_ID !== null && selectedTeams.includes(team.ENTRY_ID)) ? true : false
-            })),
+            teams: club,
         })))
     }, [data, data?.data, setTournament, isLoading, isFetching])
 
-    const onSelectTeam = useCallback((entryId: string | null) => () => {
-        if (entryId === null) return;
-
-        if (checked.includes(entryId)) {
-            setChecked(_checked => _checked.filter(c => c !== entryId));
-        } else {
-            setChecked(_checked => ([..._checked, entryId]))
-        }
-
-
-        if (!selectedTeams.includes(entryId)) {
-            const tempSelectedTeams = new Set(selectedTeams)
-            setSelectedTeams([...tempSelectedTeams, entryId])
-        } else {
-            setSelectedTeams(selectedTeams.filter(team => team !== entryId))
-        }
-
-        setTournament(_tournament => _tournament.map((t) => ({
-            name: t.name,
-            isFold: t.isFold,
-            teams: t.teams?.map(team => ({
-                ...team,
-                checked: entryId === team.ENTRY_ID ? !team.checked : (team.checked ?? false)
-            })),
-        })))
-    }, [setTournament, setSelectedTeams, selectedTeams])
-
+    
     const onFold = (name: string) => () => {
         setFoldAll(false);
         setExPandAll(false)
@@ -291,7 +262,7 @@ export default function Club() {
                     <div id="clubList" className="flex flex-col gap-4 mb-8">
                         {
                             filterAndAlignTournament.map(club => (
-                                <ClubCard club={club} checkedList={checked} setCheckedList={setChecked} isFold={!!club.isFold} onFold={onFold(club.name)} onSelectTeam={onSelectTeam} />
+                                <ClubCard club={club} checkedList={checked} setCheckedList={setChecked} isFold={!!club.isFold} onFold={onFold(club.name)} />
                             ))
                         }
 

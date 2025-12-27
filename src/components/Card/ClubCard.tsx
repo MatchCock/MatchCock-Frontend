@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import type { CustomTournamentType } from "@type/tournament"
 
@@ -6,9 +6,8 @@ interface IClubCard {
     isFold: boolean,
     club: CustomTournamentType,
     checkedList : string[],
-    setCheckedList : React.Dispatch<React.SetStateAction<string[]>>,
+    setCheckedList : (func: (_checked: string[]) => string[]) => void,
     onFold: () => void,
-    onSelectTeam: (entryId: string | null) => () => void,
 }
 
 export default function ClubCard({
@@ -17,34 +16,35 @@ export default function ClubCard({
     checkedList,
     setCheckedList,
     onFold,
-    onSelectTeam,
 }: IClubCard) {
     const ref = useRef<HTMLDivElement>(null)
     const [isSelectAll, setIsSelectAll] = useState(false);
+
+    const onSelectTeam = useCallback((entryId: string | null) => () => {
+        if (entryId === null) return;
+
+        if (checkedList.includes(entryId)) {
+            setCheckedList(_checked => _checked.filter(c => c !== entryId));
+        } else {
+            setCheckedList(_checked => ([..._checked, entryId]))
+        }
+    }, [])
 
     const onSelectAllButtonClicked = () => {
         if (club.teams === undefined) return;
         if (isSelectAll) {
             setCheckedList(_checkedList => _checkedList.filter(entry => !club.teams?.map(team => team.ENTRY_ID).includes(entry)))
-            club.teams?.forEach(team => {
-                if(team.ENTRY_ID) onSelectTeam(team.ENTRY_ID)();
-            })
         } else {
             const newCheckedList = new Set(checkedList);
             club.teams.forEach(team => team.ENTRY_ID !== null && newCheckedList.add(team.ENTRY_ID))
             setCheckedList(_checkedList => [...newCheckedList])
-
-            club.teams?.forEach(team => {
-                if(team.ENTRY_ID && !team.checked) onSelectTeam(team.ENTRY_ID)();
-            })
         }
-        
-        
+    
         setIsSelectAll(flag => !flag)
     }
 
     useEffect(() => {
-        if (club.teams?.every(team => team.checked === true)) {
+        if (club.teams?.every(team => team.ENTRY_ID != null && checkedList.includes(team.ENTRY_ID))) {
             setIsSelectAll(true);
         } else {
             setIsSelectAll(false)

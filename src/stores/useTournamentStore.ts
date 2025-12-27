@@ -2,19 +2,19 @@ import { create } from "zustand"
 
 type State = {
     tournamentId: string | null,
-    selectedTeams: string[],
+    checked: string[],
 }
 
 type Action = {
     setTournamentId: (_tournamentId: State["tournamentId"]) => void,
-    setSelectedTeams: (_selectedTeams: State["selectedTeams"]) => void
+    setChecked: (func: (_checked : State["checked"]) => State["checked"]) => void
 }
 
 const useTournamentStore = create<State & Action>((set) => ({
     tournamentId: null,
-    selectedTeams: [],
+    checked: [],
     setTournamentId: (_tournamentId) => set(() => ({ tournamentId: _tournamentId })),
-    setSelectedTeams: (_selectedTeams) => set((state) => ({ selectedTeams: [...state.selectedTeams, ..._selectedTeams] }))
+    setChecked: (func : ((_checked : string[]) => string[])) => set((state) => ({ checked: [ ...func(state.checked)] }))
 }))
 
 export default useTournamentStore;
