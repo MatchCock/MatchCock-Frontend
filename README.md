@@ -67,15 +67,9 @@
 ---
 
 <div>
-  <div>
     <img src="https://github.com/ashveil-dev/ashveil-dev/blob/main/MatchCock1.png" width="300" height="400" /> 
-  </div>
-  <div>
     <img src="https://github.com/ashveil-dev/ashveil-dev/blob/main/MatchCock2.png" width="300" height="400" /> 
-  </div>
-  <div>
     <img src="https://github.com/ashveil-dev/ashveil-dev/blob/main/MatchCock3.png" width="300" height="400" /> 
-  </div>
 </div>
 
 ## 📄 라이선스
