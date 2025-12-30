@@ -8,6 +8,18 @@ import Tournament from '@pages/Tournament/index'
 import Club from "@pages/Club";
 import Schedule from "@pages/Schedule";
 
+async function enableMocking() {
+  if (!import.meta.env.DEV) return;
+
+  const { worker } = await import("./test/server");
+
+  await worker.start({
+    onUnhandledRequest: "bypass",
+  });
+}
+
+enableMocking();
+
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
@@ -15,10 +27,10 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route index path="/MatchCock-Frontend" element={<App />} />
-          <Route path="/MatchCock-Frontend/Tournament" element={<Tournament />} />
-          <Route path="/MatchCock-Frontend/Club" element={<Club />} />
-          <Route path="/MatchCock-Frontend/Schedule" element={<Schedule />} />
+          <Route index path="/" element={<App />} />
+          <Route path="/Tournament" element={<Tournament />} />
+          <Route path="/Club" element={<Club />} />
+          <Route path="/Schedule" element={<Schedule />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
